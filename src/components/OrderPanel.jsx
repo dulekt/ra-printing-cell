@@ -9,7 +9,13 @@ import {
   Button,
   Checkbox,
   Text,
+  Table,
+  Tbody,
+  Tr,
+  Td,
+  TableContainer,
 } from "@chakra-ui/react";
+
 export default function OrderPanel(props) {
   const order = props.order;
 
@@ -31,6 +37,22 @@ export default function OrderPanel(props) {
             </Text>
           ))}
         </Stack>
+        <TableContainer>
+          <Table variant="simple">
+            <Tbody>
+              <Tr>
+                <Td>L1</Td>
+                <Td>L2</Td>
+                <Td>L3</Td>
+              </Tr>
+              <Tr>
+                <Td>L1</Td>
+                <Td>L2</Td>
+                <Td>L3</Td>
+              </Tr>
+            </Tbody>
+          </Table>
+        </TableContainer>
       </CardBody>
       <Divider />
       <CardFooter>

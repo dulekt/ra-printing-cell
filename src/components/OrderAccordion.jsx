@@ -5,9 +5,6 @@ import {
   AccordionButton,
   AccordionPanel,
   AccordionIcon,
-  Button,
-  Checkbox,
-  Stack,
   Icon,
 } from "@chakra-ui/react";
 import OrderPanel from "./OrderPanel";
@@ -53,9 +50,5 @@ function ListOrders({ orders }) {
 
 export default function OrderAccordion(props) {
   const ordersFromDB = props.ordersFromDB;
-  return (
-    <Box>
-      <ListOrders orders={ordersFromDB} />
-    </Box>
-  );
+  return <div>zamowienia: {ordersFromDB}</div>;
 }
