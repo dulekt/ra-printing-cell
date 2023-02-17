@@ -6,11 +6,11 @@ import AppFooter from "@/components/AppFooter";
 import "@/App.css";
 function App() {
   return (
-    <ChakraProvider centerContent>
-      <Container centerContent border={"solid red"}>
-        <AppHeader centerContent />
-        <AppContent centerContent />
-        <AppFooter centerContent />
+    <ChakraProvider>
+      <Container centerContent>
+        <AppHeader />
+        <AppContent />
+        <AppFooter />
       </Container>
     </ChakraProvider>
   );
