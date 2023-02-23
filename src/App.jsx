@@ -7,7 +7,7 @@ import "@/App.css";
 function App() {
   return (
     <ChakraProvider>
-      <Container centerContent>
+      <Container>
         <AppHeader />
         <AppContent />
         <AppFooter />

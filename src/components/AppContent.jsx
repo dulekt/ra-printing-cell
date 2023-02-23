@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import NewOrders from "./NewOrders";
-import OldOrders from "./OldOrders";
-import Settings from "./Settings";
-import { IconButton } from "@chakra-ui/react";
+import NewOrders from "@/components/NewOrders";
+import OldOrders from "@/components/OldOrders";
+import Settings from "@/components/Settings";
+import { IconButton, Container, Center } from "@chakra-ui/react";
 import { EmailIcon, SettingsIcon } from "@chakra-ui/icons";
-//fetch data from localhost:5000/orders and set to state
 export default function AppContent() {
   const [orders, setOrders] = useState([]);
   const [settingsOn, setSettingsOn] = useState(false);
@@ -20,7 +19,7 @@ export default function AppContent() {
   const oldOrders = orders.filter((order) => order.isPrinted === true);
 
   return (
-    <>
+    <Container>
       {" "}
       <IconButton
         colorScheme={settingsOn ? "red" : "gray"}
@@ -36,6 +35,6 @@ export default function AppContent() {
           <OldOrders oldOrders={oldOrders} />
         </div>
       )}
-    </>
+    </Container>
   );
 }

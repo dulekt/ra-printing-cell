@@ -35,6 +35,7 @@ export default function LabelUI() {
     const label = document.getElementById("label").value;
     const label_description =
       document.getElementById("label_description").value;
+    const ribbonWidth = document.getElementById("ribbon_width").value;
     const font_size = document.getElementById("font_size").value;
     const max_length = document.getElementById("max_length").value;
     const labels_in_row = document.getElementById("labels_in_row").value;
@@ -50,6 +51,7 @@ export default function LabelUI() {
       body: JSON.stringify({
         label: label,
         label_description: label_description,
+        ribbon_width: ribbonWidth,
         font_size: font_size,
         max_length: max_length,
         labels_in_row: labels_in_row,
@@ -73,36 +75,38 @@ export default function LabelUI() {
 
   return (
     <Box p={2}>
-      <Center>
-        <Box w="100%" p={1} color="white">
-          <SimpleGrid columns={4} spacing={1}>
-            <FormControl id="label">
-              <Input placeholder="Etykieta" />
-            </FormControl>
-            <FormControl id="label_description">
-              <Input placeholder="Opis etykiety" />
-            </FormControl>
-            <FormControl id="font_size">
-              <Input placeholder="Rozmiar czcionki" />
-            </FormControl>
-            <FormControl id="max_length">
-              <Input placeholder="Maksymalna długość" />
-            </FormControl>
-            <FormControl id="labels_in_row">
-              <Input placeholder="Ilość etykiet w rzędzie" />
-            </FormControl>
-            <FormControl id="print_cell_printer">
-              <Input placeholder="Drukarka komórki" />
-            </FormControl>
-            <FormControl id="workcenter_printer">
-              <Input placeholder="Drukarka workcenter" />
-            </FormControl>
-            <Button colorScheme="blue" onClick={handleAdd}>
-              Dodaj
-            </Button>
-          </SimpleGrid>
-        </Box>
-      </Center>
+      <Box w="100%" p={1} color="green">
+        <SimpleGrid columns={6} spacing={1}>
+          <FormControl id="label">
+            <Input placeholder="Etykieta" />
+          </FormControl>
+          <FormControl id="label_description">
+            <Input placeholder="Opis etykiety" />
+          </FormControl>
+          <FormControl id="ribbon_width">
+            <Input placeholder="Szerokość taśmy" />
+          </FormControl>
+          <FormControl id="font_size">
+            <Input placeholder="Rozmiar czcionki" />
+          </FormControl>
+          <FormControl id="max_length">
+            <Input placeholder="Maksymalna długość" />
+          </FormControl>
+          <FormControl id="labels_in_row">
+            <Input placeholder="Ilość etykiet w rzędzie" />
+          </FormControl>
+          <FormControl id="print_cell_printer">
+            <Input placeholder="Drukarka celka druk" />
+          </FormControl>
+          <FormControl id="workcenter_printer">
+            <Input placeholder="Drukarka workcenter" />
+          </FormControl>
+          <Button colorScheme="blue" onClick={handleAdd}>
+            Dodaj
+          </Button>
+        </SimpleGrid>
+      </Box>
+
       <Center>
         <Box p={1}>
           <Table variant="simple">
@@ -110,6 +114,7 @@ export default function LabelUI() {
               <Tr>
                 <Th>Etykieta</Th>
                 <Th>Opis etykiety</Th>
+                <Th>Szerokość taśmy</Th>
                 <Th>Rozmiar czcionki</Th>
                 <Th>Maksymalna długość</Th>
                 <Th>Ilość etykiet w rzędzie</Th>
@@ -123,6 +128,7 @@ export default function LabelUI() {
                 <Tr key={label.id}>
                   <Td>{label.label}</Td>
                   <Td>{label.label_description}</Td>
+                  <Td>{label.ribbon_width}</Td>
                   <Td>{label.font_size}</Td>
                   <Td>{label.max_length}</Td>
                   <Td>{label.labels_in_row}</Td>

@@ -10,6 +10,7 @@ import {
 import UserUI from "@/components/UserUI";
 import LabelUI from "@/components/LabelUI";
 import PrinterUI from "@/components/PrinterUI";
+import WorkcenterUI from "@/components/WorkcenterUI";
 export default function Settings() {
   //state for switching between labelUI, UserUI, printersUI
 
@@ -21,8 +22,9 @@ export default function Settings() {
             <Tab>Użytkownicy</Tab>
             <Tab>Etykiety</Tab>
             <Tab>Drukarki</Tab>
+            <Tab>Workcenters</Tab>
           </TabList>
-          <TabPanels align="center">
+          <TabPanels>
             <TabPanel>
               <UserUI />
             </TabPanel>
@@ -31,6 +33,9 @@ export default function Settings() {
             </TabPanel>
             <TabPanel>
               <PrinterUI />
+            </TabPanel>
+            <TabPanel>
+              <WorkcenterUI />
             </TabPanel>
           </TabPanels>
         </Tabs>

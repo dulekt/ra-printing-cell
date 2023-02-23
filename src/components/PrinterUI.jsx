@@ -70,9 +70,8 @@ export default function PrinterUI() {
   };
 
   return (
-    <div margin="auto" width="50%">
-      <h1>Drukarki</h1>
-      <Box m={10}>
+    <div margin="auto">
+      <Box>
         <Text>Dodaj nową drukarkę</Text>
         <SimpleGrid columns={3} spacing={3}>
           <FormControl id="printerName">
@@ -95,6 +94,7 @@ export default function PrinterUI() {
           </Button>
         </SimpleGrid>
       </Box>
+      <h1>Drukarki</h1>
       <TableContainer>
         <Table variant="simple">
           <Thead>
