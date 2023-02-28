@@ -60,9 +60,9 @@ export default function LabelUI() {
       }),
     });
     const data = await response.json();
-    console.log(data);
     fetchLabels();
   };
+
   const handleDelete = async (id) => {
     console.log(id);
     const response = await fetch(`http://localhost:5000/labels/${id}`, {

@@ -6,24 +6,18 @@ import {
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Button,
   FormControl,
   FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  SimpleGrid,
   Input,
   Box,
-  Text,
-  Center,
   Checkbox,
   CheckboxGroup,
   Stack,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
-//todo add checklist to select printable labels for workcenter
+
 export default function WorkcenterUI() {
   const [workcenters, setWorkcenters] = useState([]);
   const [printableLabels, setPrintableLabels] = useState([]);
@@ -37,12 +31,7 @@ export default function WorkcenterUI() {
   const fetchLabels = async () => {
     const response = await fetch("http://localhost:5000/labels");
     const data = await response.json();
-    console.log("data", data);
     const dataValues = Object.values(data);
-    dataValues.map((label, index) =>
-      console.log("label " + index, label.label)
-    );
-
     //set labels to an array of label names for use in checklist with default values of false
     const labelArray = dataValues.map((label) => ({
       label: label.label,
@@ -51,17 +40,35 @@ export default function WorkcenterUI() {
     setPrintableLabels(labelArray);
   };
 
-  useEffect(() => {
+  const addWorkcenter = async (workcenter) => {
+    console.log("workcenter", workcenter);
+    console.log("labels", printableLabels);
+    //labels is an array of objects with label and isChecked properties
+    //filter labels to only include labels that are checked
+    const labels = printableLabels.filter((label) => label.isChecked);
+    //map labels to an array of label names
+    const labelsArray = labels.map((label) => label.label);
+    console.log("labelsArray", labelsArray);
+    const response = await fetch("http://localhost:5000/workcenters", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        workcenter: workcenter,
+        printableLabels: labelsArray,
+      }),
+    });
+    console.log("response", response);
+
     fetchWorkcenters();
     fetchLabels();
-  }, []);
+    document.getElementById("WC").value = "";
+  };
+
   const handleCheck = (e) => {
-    console.log("e", e);
     const label = e.target.value;
     const isChecked = e.target.checked;
-    console.log("label", label);
-    console.log("isChecked", isChecked);
-    //set the isChecked value of the label to the opposite of its current value
     const newPrintableLabels = printableLabels.map((labelObj) => {
       if (labelObj.label === label) {
         labelObj.isChecked = !labelObj.isChecked;
@@ -69,30 +76,93 @@ export default function WorkcenterUI() {
       return labelObj;
     });
     setPrintableLabels(newPrintableLabels);
-    console.log("newPrintableLabels", newPrintableLabels);
+    console.log(printableLabels);
   };
 
+  const deleteWorkcenter = async (workcenterID) => {
+    const response = await fetch(
+      "http://localhost:5000/workcenters/ " + workcenterID,
+      {
+        method: "DELETE",
+      }
+    );
+    const data = await response.json();
+    fetchWorkcenters();
+    fetchLabels();
+  };
+
+  useEffect(() => {
+    fetchWorkcenters();
+    fetchLabels();
+  }, []);
+
   return (
-    //a checklist stack of labels to select for each workcenter that adds to the array of printable labels
     <Box>
-      <SimpleGrid columns={2} spacing={10}>
-        <FormControl id="workcenter">
+      <TableContainer>
+        <Table variant="simple">
+          <Thead>
+            <Tr>
+              <Th>Workcenter</Th>
+              <Th>Labels</Th>
+              <Th>Delete</Th>
+            </Tr>
+          </Thead>
+          <Tbody>
+            {workcenters.map((workcenter, index) => (
+              <Tr key={index}>
+                <Td>{workcenter.workcenter}</Td>
+                <Td>
+                  <ol>
+                    {workcenter.printableLabels.map((label, index) => (
+                      <li key={index}>{label}</li>
+                    ))}
+                  </ol>
+                </Td>
+                <Td>
+                  <Button
+                    colorScheme="red"
+                    size="sm"
+                    variant="outline"
+                    onClick={() => deleteWorkcenter(workcenter.workcenterID)}
+                  >
+                    X
+                  </Button>
+                </Td>
+              </Tr>
+            ))}
+          </Tbody>
+        </Table>
+      </TableContainer>
+      <Box>
+        <FormControl id="WC">
           <FormLabel>Workcenter</FormLabel>
           <Input type="text" />
         </FormControl>
-        <FormControl id="printableLabels">
-          <FormLabel>Printable Labels</FormLabel>
-          <Stack spacing={1}>
-            <CheckboxGroup colorScheme="green">
-              {printableLabels.map((label) => (
-                <Checkbox value={label.label} onChange={handleCheck}>
+        <FormControl id="labels">
+          <FormLabel>Etykiety</FormLabel>
+          <CheckboxGroup>
+            <Stack>
+              {printableLabels.map((label, index) => (
+                <Checkbox
+                  key={index}
+                  value={label.label}
+                  onChange={handleCheck}
+                >
                   {label.label}
                 </Checkbox>
               ))}
-            </CheckboxGroup>
-          </Stack>
+            </Stack>
+          </CheckboxGroup>
         </FormControl>
-      </SimpleGrid>
+        <Button
+          onClick={() => addWorkcenter(document.getElementById("WC").value)}
+          colorScheme="blue"
+          size="sm"
+          variant="outline"
+        >
+          Dodaj
+        </Button>
+      </Box>
     </Box>
   );
 }

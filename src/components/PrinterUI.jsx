@@ -17,17 +17,33 @@ import {
   Input,
   Box,
   Text,
+  Select,
   Center,
 } from "@chakra-ui/react";
 import { useEffect, useState } from "react";
+
 export default function PrinterUI() {
   const [printers, setPrinters] = useState([]);
+  const [workcenters, setWorkcenters] = useState([]);
+
+  const fetchWorkcenters = async () => {
+    const response = await fetch("http://localhost:5000/workcenters");
+    const data = await response.json();
+    const dataArr = Object.values(data);
+    console.log("dataArr", dataArr);
+    const workcenterArr = dataArr.map((workcenter) => workcenter.workcenter);
+    setWorkcenters(workcenterArr);
+    console.log(workcenterArr);
+  };
+
   const fetchPrinters = async () => {
     const response = await fetch("http://localhost:5000/printers");
     const data = await response.json();
     setPrinters(Object.values(data));
   };
+
   useEffect(() => {
+    fetchWorkcenters();
     fetchPrinters();
   }, []);
 
@@ -52,6 +68,12 @@ export default function PrinterUI() {
     });
     const data = await response.json();
     console.log(data);
+    //set form fields to empty
+    document.getElementById("printerName").value = "";
+    document.getElementById("printerIP").value = "";
+    document.getElementById("printerPort").value = "";
+    document.getElementById("printerDPI").value = "";
+
     fetchPrinters();
   };
 
@@ -87,10 +109,17 @@ export default function PrinterUI() {
             <Input type="text" placeholder="DPI" />
           </FormControl>
           <FormControl id="workcenter">
-            <Input type="text" placeholder="Workcenter" />
+            <Select type="text" placeholder="Workcenter">
+              //add options for every workcenter
+              {workcenters.map((workcenter, index) => (
+                <option key={workcenter + index} value={workcenter}>
+                  {workcenter}
+                </option>
+              ))}
+            </Select>
           </FormControl>
-          <Button colorScheme="blue" onClick={handleAdd}>
-            Add
+          <Button colorScheme="blue" size="sm" onClick={handleAdd}>
+            Dodaj
           </Button>
         </SimpleGrid>
       </Box>
@@ -120,7 +149,7 @@ export default function PrinterUI() {
                     colorScheme="red"
                     onClick={() => handleDelete(printer.printerID)}
                   >
-                    Delete
+                    X
                   </Button>
                 </Td>
               </Tr>
