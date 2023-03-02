@@ -91,7 +91,7 @@ export default function UserUI() {
                     colorScheme="red"
                     onClick={() => handleDelete(user.userID)}
                   >
-                    Delete
+                    X
                   </Button>
                 </Td>
               </Tr>

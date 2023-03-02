@@ -30,7 +30,7 @@ export default function PrinterUI() {
     const response = await fetch("http://localhost:5000/workcenters");
     const data = await response.json();
     const dataArr = Object.values(data);
-    console.log("dataArr", dataArr);
+
     const workcenterArr = dataArr.map((workcenter) => workcenter.workcenter);
     setWorkcenters(workcenterArr);
     console.log(workcenterArr);
@@ -147,6 +147,8 @@ export default function PrinterUI() {
                 <Td>
                   <Button
                     colorScheme="red"
+                    variant="outline"
+                    size="sm"
                     onClick={() => handleDelete(printer.printerID)}
                   >
                     X

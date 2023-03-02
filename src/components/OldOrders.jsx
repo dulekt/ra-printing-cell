@@ -30,7 +30,6 @@ import {
   ModalCloseButton,
 } from "@chakra-ui/react";
 export default function OldOrders({ oldOrders }) {
-  console.log("old", oldOrders);
   return (
     <div>
       {oldOrders.length > 0 && (
