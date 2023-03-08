@@ -106,21 +106,22 @@ export default function UserUI() {
         flexDirection="row"
         justifyContent="space-between"
       >
-        <Input type="text" placeholder="Username" />
+        <Input m={1} type="text" placeholder="Username" />
       </FormControl>
-      <FormControl id="name">
+      <FormControl m={1} id="name">
         <Input type="text" placeholder="Imię" />
       </FormControl>
-      <FormControl id="surname">
+      <FormControl m={1} id="surname">
         <Input type="text" placeholder="Nazwisko" />
       </FormControl>
       <Button
-        size="xs"
-        variant="outline"
+        m={1}
+        size="sm"
+        //variant="outline"
         colorScheme="blue"
         onClick={() => handleAdd()}
       >
-        Add
+        Dodaj
       </Button>
     </div>
   );

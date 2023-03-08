@@ -15,7 +15,7 @@ import {
   ModalCloseButton,
   Text,
 } from "@chakra-ui/react";
-
+import Modal_Plastic from "@/components/Modal_Plastic";
 function handlePrint(id) {
   console.log(id);
   const sendPrintRequest = async (id) => {
@@ -91,70 +91,13 @@ export default function NewOrders({ newOrders, fetchOrders }) {
                     Print
                   </Button>
                 ) : (
-                  <Button colorScheme="green" size="sm" onClick={onOpen}>
-                    Show
-                  </Button>
+                  <Modal_Plastic order={order} />
                 )}
               </Td>
             </Tr>
           ))}
         </Tbody>
       </Table>
-      <Modal isOpen={isOpen} onClose={onClose} size="xl">
-        <ModalOverlay />
-        <ModalContent>
-          <ModalCloseButton />
-
-          <ModalBody>
-            {
-              //todo  order.order_type="Oznaczenia plastikowe"  grupa=order.id, tresc=order.order_type,ilosc=order.quantity,nosnik=order.nosnik
-              //todo  order.order_type="Naklejki"              header(order.user,order.workcenter) body(order.labelType------order.description)
-            }
-
-            <Table variant="striped">
-              <Thead>
-                <Tr>
-                  <Th>Grupa</Th>
-                  <Th>Tresc</Th>
-                  <Th>Ilość</Th>
-                  <Th>Nosnik</Th>
-                </Tr>
-              </Thead>
-              <Tbody>
-                <Tr>
-                  <Td>16701|1|bdytko</Td>
-                  <Td>CSH1-L1A</Td>
-                  <Td>18</Td>
-                  <Td>1</Td>
-                </Tr>
-                <Tr>
-                  <Td>16701|1|bdytko</Td>
-                  <Td>CSH1-L1A</Td>
-                  <Td>18</Td>
-                  <Td>1</Td>
-                </Tr>
-                <Tr>
-                  <Td>16702|5|mulikow</Td>
-                  <Td>S6</Td>
-                  <Td>12</Td>
-                  <Td>1</Td>
-                </Tr>
-              </Tbody>
-            </Table>
-          </ModalBody>
-          <ModalFooter>
-            {
-              //todo copy to clipboard secondary action
-            }
-            <Button colorScheme="blue" mr={3} variant="outline">
-              Copy to clipboard
-            </Button>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </div>
   );
 }

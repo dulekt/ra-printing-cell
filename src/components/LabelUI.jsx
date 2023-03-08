@@ -125,7 +125,7 @@ export default function LabelUI() {
             <Input placeholder="Ilość linii tekstu" />
           </FormControl>
 
-          <Button colorScheme="blue" onClick={handleAdd}>
+          <Button m={1} size="sm" colorScheme="blue" onClick={handleAdd}>
             Dodaj
           </Button>
         </SimpleGrid>

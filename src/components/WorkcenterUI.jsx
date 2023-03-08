@@ -133,10 +133,10 @@ export default function WorkcenterUI() {
           </Tbody>
         </Table>
       </TableContainer>
-      <Box>
+      <Box borderTop="1px solid #BBBBBB">
         <FormControl id="WC">
-          <FormLabel>Workcenter</FormLabel>
-          <Input type="text" />
+          <FormLabel>Dodaj nowy workcenter</FormLabel>
+          <Input type="text" placeholder="Workcenter" />
         </FormControl>
         <FormControl id="labels">
           <FormLabel>Etykiety</FormLabel>
@@ -158,7 +158,7 @@ export default function WorkcenterUI() {
           onClick={() => addWorkcenter(document.getElementById("WC").value)}
           colorScheme="blue"
           size="sm"
-          variant="outline"
+          //variant="outline"
         >
           Dodaj
         </Button>

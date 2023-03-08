@@ -8,13 +8,15 @@ import {
   Center,
   Collapse,
   Button,
+  Skeleton,
 } from "@chakra-ui/react";
 
-import { EmailIcon, SettingsIcon } from "@chakra-ui/icons";
+import { SettingsIcon } from "@chakra-ui/icons";
 export default function AppContent() {
   const [orders, setOrders] = useState([]);
   const [settingsOn, setSettingsOn] = useState(false);
   const [show, setShow] = useState(false);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const handleToggle = () => setShow(!show);
 
@@ -23,10 +25,12 @@ export default function AppContent() {
     const data = await response.json();
     setOrders(Object.values(data));
   };
-  const TIME_MS = 10000; //refresh time in ms
+  const TIME_MS = 1500; //refresh time in ms
 
   useEffect(() => {
+    setIsLoaded(false);
     fetchOrders();
+    setIsLoaded(true);
     const interval = setInterval(() => {
       fetchOrders();
     }, TIME_MS);
@@ -37,25 +41,30 @@ export default function AppContent() {
   const oldOrders = orders.filter((order) => order.isPrinted === true);
 
   return (
-    <Container>
-      {" "}
-      <IconButton
-        colorScheme={settingsOn ? "red" : "gray"}
-        aria-label="Settings"
-        variant={settingsOn ? "solid" : "outline"}
-        onClick={() => setSettingsOn(!settingsOn)}
-        icon={<SettingsIcon />}
-      />
-      {settingsOn && <Settings />}
-      {!settingsOn && (
-        <div>
-          <NewOrders newOrders={newOrders} fetchOrders={fetchOrders} />
-          <OldOrders oldOrders={oldOrders} />
-          {
-            //todo make collapse button for old orders
-          }
-        </div>
-      )}
-    </Container>
+    <Skeleton isLoaded={isLoaded}>
+      <Container>
+        {" "}
+        <Button
+          colorScheme={settingsOn ? "red" : "blue"}
+          aria-label="Settings"
+          variant={settingsOn ? "solid" : "outline"}
+          onClick={() => setSettingsOn(!settingsOn)}
+          leftIcon={<SettingsIcon />}
+        >
+          Settings
+        </Button>
+        {settingsOn && <Settings />}
+        {!settingsOn && (
+          <div>
+            <NewOrders newOrders={newOrders} fetchOrders={fetchOrders} />
+
+            {
+              //todo make collapse button for old orders
+              <OldOrders oldOrders={oldOrders} />
+            }
+          </div>
+        )}
+      </Container>
+    </Skeleton>
   );
 }
