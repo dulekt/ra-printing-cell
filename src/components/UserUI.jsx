@@ -2,44 +2,25 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Button,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  SimpleGrid,
   Input,
-  Box,
-  Text,
-  Center,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
-export default function UserUI() {
-  const [users, setUsers] = useState([]);
-  const fetchUsers = async () => {
-    const response = await fetch("http://localhost:5000/users");
-    const data = await response.json();
-    setUsers(Object.values(data));
-  };
-  useEffect(() => {
-    fetchUsers();
-  }, []);
+} from '@chakra-ui/react';
 
-  const handleAdd = async (e) => {
-    const username = document.getElementById("username").value;
-    const name = document.getElementById("name").value;
-    const surname = document.getElementById("surname").value;
+export default function UserUI({ users}) {
+  const handleAdd = async e => {
+    const username = document.getElementById('username').value;
+    const name = document.getElementById('name').value;
+    const surname = document.getElementById('surname').value;
 
-    const response = await fetch("http://localhost:5000/users", {
-      method: "POST",
+    const response = await fetch('http://localhost:5000/users', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         username: username,
@@ -47,21 +28,15 @@ export default function UserUI() {
         surname: surname,
       }),
     });
-    const data = await response.json();
-    console.log(data);
-    fetchUsers();
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     const response = await fetch(`http://localhost:5000/users/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
-    const data = await response.json();
-    console.log(data);
-    fetchUsers();
   };
 
   return (
@@ -78,7 +53,7 @@ export default function UserUI() {
             </Tr>
           </Thead>
           <Tbody>
-            {users.map((user) => (
+            {users.map(user => (
               <Tr key={user.userID}>
                 <Td>{user.username}</Td>
                 <Td>{user.name}</Td>

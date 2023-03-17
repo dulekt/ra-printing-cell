@@ -15,7 +15,7 @@ import {
   ModalCloseButton,
   ModalHeader,
   Text,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 export default function Modal_Plastic(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -24,13 +24,13 @@ export default function Modal_Plastic(props) {
 
   function countValues(list) {
     const counts = {};
-    list.forEach((x) => {
+    list.forEach(x => {
       counts[x] = (counts[x] || 0) + 1;
     });
     return counts;
   }
   const valueCounts = countValues(order.content);
-  const grupa = order.id + "|" + order.user + "|" + order.workcenter;
+  const grupa = order.id + '|' + order.user + '|' + order.workcenter;
   const nosnik = order.labelType;
   return (
     <>

@@ -1,7 +1,7 @@
-import { useEffect, useState } from "react";
-import NewOrders from "@/components/NewOrders";
-import OldOrders from "@/components/OldOrders";
-import Settings from "@/components/Settings";
+import { useEffect, useState } from 'react';
+import NewOrders from '@/components/NewOrders';
+import OldOrders from '@/components/OldOrders';
+import Settings from '@/components/Settings';
 import {
   IconButton,
   Container,
@@ -9,9 +9,9 @@ import {
   Collapse,
   Button,
   Skeleton,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
-import { SettingsIcon } from "@chakra-ui/icons";
+import { SettingsIcon } from '@chakra-ui/icons';
 export default function AppContent() {
   const [orders, setOrders] = useState([]);
   const [settingsOn, setSettingsOn] = useState(false);
@@ -21,7 +21,7 @@ export default function AppContent() {
   const handleToggle = () => setShow(!show);
 
   const fetchOrders = async () => {
-    const response = await fetch("http://localhost:5000/orders");
+    const response = await fetch('http://localhost:5000/orders');
     const data = await response.json();
     setOrders(Object.values(data));
   };
@@ -37,17 +37,17 @@ export default function AppContent() {
     return () => clearInterval(interval);
   }, []);
 
-  const newOrders = orders.filter((order) => order.isPrinted === false);
-  const oldOrders = orders.filter((order) => order.isPrinted === true);
+  const newOrders = orders.filter(order => order.isPrinted === false);
+  const oldOrders = orders.filter(order => order.isPrinted === true);
 
   return (
     <Skeleton isLoaded={isLoaded}>
       <Container>
-        {" "}
+        {' '}
         <Button
-          colorScheme={settingsOn ? "red" : "blue"}
+          colorScheme={settingsOn ? 'red' : 'blue'}
           aria-label="Settings"
-          variant={settingsOn ? "solid" : "outline"}
+          variant={settingsOn ? 'solid' : 'outline'}
           onClick={() => setSettingsOn(!settingsOn)}
           leftIcon={<SettingsIcon />}
         >

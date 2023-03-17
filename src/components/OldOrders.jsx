@@ -28,7 +28,7 @@ import {
   ModalFooter,
   ModalBody,
   ModalCloseButton,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 export default function OldOrders({ oldOrders }) {
   return (
     <div>
@@ -44,7 +44,7 @@ export default function OldOrders({ oldOrders }) {
             </Tr>
           </Thead>
           <Tbody>
-            {oldOrders.map((order) => (
+            {oldOrders.map(order => (
               <Tr key={order.id}>
                 <Td>{order.datetime}</Td>
                 <Td>{order.order_type}</Td>

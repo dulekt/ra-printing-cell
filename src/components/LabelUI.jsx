@@ -19,46 +19,28 @@ import {
   Box,
   Text,
   Center,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-export default function LabelUI() {
-  const [labels, setLabels] = useState([]);
-  const [printers, setPrinters] = useState([]);
-  const fetchLabels = async () => {
-    const response = await fetch("http://localhost:5000/labels");
-    const data = await response.json();
-    setLabels(Object.values(data));
-  };
-  const fetchPrinters = async () => {
-    const response = await fetch("http://localhost:5000/printers");
-    const data = await response.json();
-    const dataArr = Object.values(data);
-    const printerArr = dataArr.map((printer) => printer.printerName);
-    setPrinters(printerArr);
-    console.log("printers: ", printerArr);
-  };
+export default function LabelUI({labels,printers,isLoading,isError,errorMessage }  ) {
 
-  useEffect(() => {
-    fetchLabels();
-    fetchPrinters();
-  }, []);
-  const handleAdd = async (e) => {
-    const label = document.getElementById("label").value;
-    const label_width = document.getElementById("label_width").value;
-    const label_height = document.getElementById("label_height").value;
-    const ribbonWidth = document.getElementById("ribbon_width").value;
-    const label_x0 = document.getElementById("label_x0").value;
-    const font_size = document.getElementById("font_size").value;
-    const labels_in_row = document.getElementById("labels_in_row").value;
+
+  const handleAdd = async e => {
+    const label = document.getElementById('label').value;
+    const label_width = document.getElementById('label_width').value;
+    const label_height = document.getElementById('label_height').value;
+    const ribbonWidth = document.getElementById('ribbon_width').value;
+    const label_x0 = document.getElementById('label_x0').value;
+    const font_size = document.getElementById('font_size').value;
+    const labels_in_row = document.getElementById('labels_in_row').value;
     const print_cell_printer =
-      document.getElementById("print_cell_printer").value;
-    const lines_of_text = document.getElementById("lines_of_text").value;
+      document.getElementById('print_cell_printer').value;
+    const lines_of_text = document.getElementById('lines_of_text').value;
 
-    const response = await fetch("http://localhost:5000/labels", {
-      method: "POST",
+    const response = await fetch('http://localhost:5000/labels', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         label: label,
@@ -76,10 +58,10 @@ export default function LabelUI() {
     fetchLabels();
   };
 
-  const handleDelete = async (id) => {
-    console.log("id: ", id);
+  const handleDelete = async id => {
+    console.log('id: ', id);
     const response = await fetch(`http://localhost:5000/labels/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
     });
     const data = await response.json();
 
@@ -116,7 +98,7 @@ export default function LabelUI() {
           </FormControl>
           <FormControl id="print_cell_printer">
             <Select placeholder="Drukarka celka">
-              {printers.map((printer) => (
+              {printers.map(printer => (
                 <option key={printer}>{printer}</option>
               ))}
             </Select>
@@ -130,7 +112,9 @@ export default function LabelUI() {
           </Button>
         </SimpleGrid>
       </Box>
-
+{ isLoading && <Text>Ładowanie...</Text>}
+{ isError && <Text>Błąd: {errorMessage}</Text>}
+{ !isLoading && !isError &&
       <Center>
         <Box p={1}>
           <Table variant="simple">
@@ -149,7 +133,7 @@ export default function LabelUI() {
               </Tr>
             </Thead>
             <Tbody>
-              {labels.map((label) => (
+              {labels.map(label => (
                 <Tr key={label.labelID}>
                   <Td>{label.label}</Td>
                   <Td>{label.label_width}</Td>
@@ -175,7 +159,9 @@ export default function LabelUI() {
             </Tbody>
           </Table>
         </Box>
-      </Center>
+      </Center>}
+
     </Box>
+    
   );
 }

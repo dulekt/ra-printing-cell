@@ -14,15 +14,15 @@ import {
   ModalBody,
   ModalCloseButton,
   Text,
-} from "@chakra-ui/react";
-import Modal_Plastic from "@/components/Modal_Plastic";
+} from '@chakra-ui/react';
+import Modal_Plastic from '@/components/Modal_Plastic';
 function handlePrint(id) {
   console.log(id);
-  const sendPrintRequest = async (id) => {
+  const sendPrintRequest = async id => {
     const response = await fetch(`http://localhost:5000/print_cell/${id}`, {
-      method: "POST",
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
     const data = await response.json();
@@ -31,9 +31,9 @@ function handlePrint(id) {
   sendPrintRequest(id);
 }
 function getDate(datetime) {
-  const fullDate = datetime.split("T")[0];
+  const fullDate = datetime.split('T')[0];
 
-  const reverseDate = fullDate.split("-").reverse();
+  const reverseDate = fullDate.split('-').reverse();
   const DD = reverseDate[0];
   const MM = reverseDate[1];
   const date = `${DD}/${MM}`;
@@ -41,9 +41,9 @@ function getDate(datetime) {
 }
 
 function getTime(datetime) {
-  const time = datetime.split("T")[1].split(".")[0];
-  const HH = time.split(":")[0];
-  const MM = time.split(":")[1];
+  const time = datetime.split('T')[1].split('.')[0];
+  const HH = time.split(':')[0];
+  const MM = time.split(':')[1];
   const HHMM = `${HH}:${MM}`;
   return HHMM;
 }
@@ -74,7 +74,7 @@ export default function NewOrders({ newOrders, fetchOrders }) {
           </Tr>
         </Thead>
         <Tbody>
-          {newOrders.map((order) => (
+          {newOrders.map(order => (
             <Tr key={order.id}>
               <Td>{getDate(order.datetime)}</Td>
               <Td>{getTime(order.datetime)}</Td>
@@ -82,7 +82,7 @@ export default function NewOrders({ newOrders, fetchOrders }) {
               <Td>{order.user}</Td>
               <Td>{order.workcenter}</Td>
               <Td>
-                {order.order_type === "Naklejki" ? (
+                {order.order_type === 'Naklejki' ? (
                   <Button
                     colorScheme="blue"
                     size="sm"

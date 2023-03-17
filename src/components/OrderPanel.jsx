@@ -14,7 +14,7 @@ import {
   Tr,
   Td,
   TableContainer,
-} from "@chakra-ui/react";
+} from '@chakra-ui/react';
 
 export default function OrderPanel(props) {
   const order = props.order;
@@ -25,14 +25,14 @@ export default function OrderPanel(props) {
         <Stack mt="6" spacing="3">
           <Heading size="md">
             {order.orderType}
-            {": "}
+            {': '}
             {order.labelType}
           </Heading>
           <Text>{order.description} </Text>
-          {order.content.map((element) => (
+          {order.content.map(element => (
             <Text color="blue.600" fontSize="2xl">
               {element.text}
-              {": "}
+              {': '}
               {element.ammount}
             </Text>
           ))}
@@ -63,9 +63,9 @@ export default function OrderPanel(props) {
           <Checkbox
             size="md"
             colorScheme="blue"
-            color={"blue.400"}
+            color={'blue.400'}
             isChecked={order.isPrinted}
-            onChange={(e) => {
+            onChange={e => {
               handleTogglePrinted(e, order);
             }}
           >

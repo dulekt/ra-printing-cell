@@ -19,44 +19,21 @@ import {
   Text,
   Select,
   Center,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+} from '@chakra-ui/react';
+import { useEffect, useState } from 'react';
 
-export default function PrinterUI() {
-  const [printers, setPrinters] = useState([]);
-  const [workcenters, setWorkcenters] = useState([]);
+export default function PrinterUI({ printers, workcenters, isLoading, isError, errorMessage }) {
 
-  const fetchWorkcenters = async () => {
-    const response = await fetch("http://localhost:5000/workcenters");
-    const data = await response.json();
-    const dataArr = Object.values(data);
-
-    const workcenterArr = dataArr.map((workcenter) => workcenter.workcenter);
-    setWorkcenters(workcenterArr);
-    console.log(workcenterArr);
-  };
-
-  const fetchPrinters = async () => {
-    const response = await fetch("http://localhost:5000/printers");
-    const data = await response.json();
-    setPrinters(Object.values(data));
-  };
-
-  useEffect(() => {
-    fetchWorkcenters();
-    fetchPrinters();
-  }, []);
-
-  const handleAdd = async (e) => {
-    const name = document.getElementById("printerName").value;
-    const printerIP = document.getElementById("printerIP").value;
-    const printerPort = document.getElementById("printerPort").value;
-    const printerDPI = document.getElementById("printerDPI").value;
-    const workcenter = document.getElementById("workcenter").value;
-    const response = await fetch("http://localhost:5000/printers", {
-      method: "POST",
+  const handleAdd = async e => {
+    const name = document.getElementById('printerName').value;
+    const printerIP = document.getElementById('printerIP').value;
+    const printerPort = document.getElementById('printerPort').value;
+    const printerDPI = document.getElementById('printerDPI').value;
+    const workcenter = document.getElementById('workcenter').value;
+    const response = await fetch('http://localhost:5000/printers', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         printerName: name,
@@ -69,20 +46,20 @@ export default function PrinterUI() {
     const data = await response.json();
     console.log(data);
     //set form fields to empty
-    document.getElementById("printerName").value = "";
-    document.getElementById("printerIP").value = "";
-    document.getElementById("printerPort").value = "";
-    document.getElementById("printerDPI").value = "";
+    document.getElementById('printerName').value = '';
+    document.getElementById('printerIP').value = '';
+    document.getElementById('printerPort').value = '';
+    document.getElementById('printerDPI').value = '';
 
     fetchPrinters();
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async id => {
     console.log(id);
     const response = await fetch(`http://localhost:5000/printers/${id}`, {
-      method: "DELETE",
+      method: 'DELETE',
       headers: {
-        "Content-Type": "application/json",
+        'Content-Type': 'application/json',
       },
     });
 
@@ -124,6 +101,9 @@ export default function PrinterUI() {
         </SimpleGrid>
       </Box>
       <h1>Drukarki</h1>
+      {isLoading && <div>Loading...</div>}
+      {isError && <div>ERROR {JSON.stringify(errorMessage)}</div>}
+      {!isLoading && !isError && (
       <TableContainer>
         <Table variant="simple">
           <Thead>
@@ -137,7 +117,7 @@ export default function PrinterUI() {
             </Tr>
           </Thead>
           <Tbody>
-            {printers.map((printer) => (
+            {printers?.map(printer => (
               <Tr key={printer.printerID}>
                 <Td>{printer.printerName}</Td>
                 <Td>{printer.printerIP}</Td>
@@ -159,6 +139,7 @@ export default function PrinterUI() {
           </Tbody>
         </Table>
       </TableContainer>
+      )}
     </div>
   );
 }

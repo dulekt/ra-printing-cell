@@ -1,18 +1,18 @@
 export default function preparePrintPayload(listOfLabels) {
-  const prefix = "^";
+  const prefix = '^';
   const beginLabelDefinition = `${prefix}XA`;
 
   const changeFont = (fontName, height, width) =>
-    `${prefix}CF${fontName}${height ? `,${height}` : ""}${
-      width ? `,${width}` : ""
+    `${prefix}CF${fontName}${height ? `,${height}` : ''}${
+      width ? `,${width}` : ''
     }`;
 
   const setPosition = (x, y, alignment) =>
-    `${prefix}FO${x}${y ? `,${y}` : ""}${alignment ? `,${alignment}` : ""}`;
+    `${prefix}FO${x}${y ? `,${y}` : ''}${alignment ? `,${alignment}` : ''}`;
 
-  const mode = (mode) => `${prefix}MM${mode}`;
+  const mode = mode => `${prefix}MM${mode}`;
 
-  const cut = "C";
+  const cut = 'C';
 
   const labelStart = `${prefix}FD`;
   const labelEnd = `${prefix}FS`;
@@ -28,7 +28,7 @@ export default function preparePrintPayload(listOfLabels) {
   }, []);
 
   const allLabels = groupedLabels.map(
-    (group) =>
+    group =>
       `${beginLabelDefinition}${changeFont(0, 50)}${group.map(
         (label, index) => {
           const offset = 145 + index * 200;
