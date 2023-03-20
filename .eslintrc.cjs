@@ -20,6 +20,7 @@ module.exports = {
         node: true,
         es6: true,
     },
+    parserOptions: { ecmaVersion: 2020, sourceType: 'module' },
     globals: {
         sessionStorage: true,
         localStorage: false,
@@ -35,10 +36,12 @@ module.exports = {
         assert: true,
         describe: true,
     },
-    extends: ['airbnb-base', 'prettier', 'plugin:react/jsx-runtime'],
+    extends: ['airbnb-base', 'prettier', 'plugin:react/recommended'],
+
     plugins: ['prettier', 'import', 'simple-import-sort', 'react', 'react-hooks'],
     rules: {
         curly: ['error', 'all'],
+        'react/prop-types': 0,
         'no-shadow': [
             'error',
             {

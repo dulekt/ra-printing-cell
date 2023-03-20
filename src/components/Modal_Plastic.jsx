@@ -5,22 +5,18 @@ import {
     ModalCloseButton,
     ModalContent,
     ModalFooter,
-    ModalHeader,
     ModalOverlay,
     Table,
     Tbody,
     Td,
-    Text,
     Th,
     Thead,
     Tr,
     useDisclosure,
 } from '@chakra-ui/react';
 
-export default function Modal_Plastic(props) {
+export default function Modal_Plastic({ order }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { order } = props;
-    // function takes a list of values and returns object list elements as keys and values as count
 
     function countValues(list) {
         const counts = {};
@@ -37,7 +33,7 @@ export default function Modal_Plastic(props) {
 
     return (
         <>
-            <Button colorScheme="green" size="sm" onClick={onOpen}>
+            <Button colorScheme="green" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
                 Grawerka
             </Button>
 
@@ -46,11 +42,6 @@ export default function Modal_Plastic(props) {
                 <ModalContent>
                     <ModalCloseButton />
                     <ModalBody>
-                        {
-                            // todo  order.order_type="Oznaczenia plastikowe"  grupa=order.id, _|_ tresc=order.order_type_|_ilosc=order.quantity_|_nosnik=order.nosnik
-                            // todo  order.order_type="Naklejki"              header(order.user,order.workcenter) body(order.labelType------order.description)
-                        }
-
                         <Table variant="striped">
                             <Thead>
                                 <Tr>
@@ -62,7 +53,7 @@ export default function Modal_Plastic(props) {
                             </Thead>
                             <Tbody>
                                 {Object.entries(valueCounts).map(([value, count]) => (
-                                    <Tr>
+                                    <Tr key={value + count}>
                                         <Td>{grupa}</Td>
                                         <Td>{value}</Td>
                                         <Td>{count}</Td>

@@ -1,15 +1,6 @@
-import {
-    Button,
-    Table,
-    Tbody,
-    Td,
-    Text,
-    Th,
-    Thead,
-    Tr,
-    useDisclosure,
-} from '@chakra-ui/react';
+import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 
+import ModalSpecialOrders from './ModalSpecialOrders';
 import Modal_Plastic from '@/components/Modal_Plastic';
 
 function handlePrint(id) {
@@ -50,7 +41,7 @@ function getTime(datetime) {
     return HHMM;
 }
 
-export default function OrderTable({orders}) {
+export default function OrderTable({ orders, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     function handleClick(id) {
         handlePrint(id);
@@ -61,8 +52,8 @@ export default function OrderTable({orders}) {
     return (
         <div>
             {orders?.length === 0 && (
-                <Text fontSize="xl" fontWeight="bold" color="red.500">
-                    Brak nowych zamówień
+                <Text fontSize="xl" fontWeight="bold" color="red.400">
+                    Brak zamówień
                 </Text>
             )}
 
@@ -79,10 +70,6 @@ export default function OrderTable({orders}) {
                 </Thead>
                 <Tbody>
                     {orders?.map(order => (
-
-
-
-
                         <Tr key={order.id}>
                             <Td>{getDate(order?.datetime)}</Td>
                             <Td>{getTime(order?.datetime)}</Td>
@@ -90,13 +77,27 @@ export default function OrderTable({orders}) {
                             <Td>{order?.user}</Td>
                             <Td>{order?.workcenter}</Td>
                             <Td>
-                                {order?.order_type === 'Naklejki' ? (
-                                    <Button colorScheme="blue" size="sm" onClick={() => handlePrint(order.id)}>
-                                        Print
-                                    </Button>
-                                ) : (
-                                    <Modal_Plastic order={order} />
-                                )}
+                                {(() => {
+                                    switch (order?.order_type) {
+                                        case 'Naklejki':
+                                            return (
+                                                <Button
+                                                    colorScheme="blue"
+                                                    variant={order.isPrinted ? 'outline' : 'solid'}
+                                                    size="sm"
+                                                    onClick={() => handleClick(order.id)}
+                                                >
+                                                    Print
+                                                </Button>
+                                            );
+
+                                        case 'Oznaczenia plastikowe':
+                                            return <Modal_Plastic order={order} />;
+
+                                        default:
+                                            return <ModalSpecialOrders order={order} />;
+                                    }
+                                })()}
                             </Td>
                         </Tr>
                     ))}

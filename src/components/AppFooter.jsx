@@ -1,14 +1,11 @@
 //
-import React from 'react';
-import { Container } from '@chakra-ui/react';
+
+import { Container, Link } from '@chakra-ui/react';
 
 export default function AppFooter() {
     return (
         <Container>
-            <h1>
-                Footer Text
-
-            </h1>
+            <Link href="mailto: dusko.relic@rockwellautomation.com">Created by Dusko Relic</Link>
         </Container>
     );
 }
