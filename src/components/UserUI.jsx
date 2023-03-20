@@ -1,46 +1,54 @@
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  TableContainer,
   Button,
   FormControl,
   Input,
+  Table,
+  TableContainer,
+  Tbody,
+  Td,
+  Th,
+  Thead,
+  Tr,
 } from '@chakra-ui/react';
 
-export default function UserUI({ users}) {
-  const handleAdd = async e => {
-    const username = document.getElementById('username').value;
-    const name = document.getElementById('name').value;
-    const surname = document.getElementById('surname').value;
 
-    const response = await fetch('http://localhost:5000/users', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: username,
-        name: name,
-        surname: surname,
+export default function UserUI({ users }) {
+
+    const handleAdd = async e => {
+        const username = document.getElementById('username').value;
+        const name = document.getElementById('name').value;
+        const surname = document.getElementById('surname').value;
+
+        const response = await fetch('http://localhost:5000/users', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                username: username,
+        name,
+        surname,
       }),
     });
+// clear form fields
+
+    document.getElementById('username').value = '';
+    document.getElementById('name').value = '';
+    document.getElementById('surname').value = '';
+
   };
 
-  const handleDelete = async id => {
-    const response = await fetch(`http://localhost:5000/users/${id}`, {
-      method: 'DELETE',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-  };
+    const handleDelete = async id => {
+        const response = await fetch(`http://localhost:5000/users/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+    };
 
-  return (
-    <div>
+    return (
+      <div>
       <h1>Użytkownicy</h1>
       <TableContainer>
         <Table variant="simple">
@@ -59,7 +67,7 @@ export default function UserUI({ users}) {
                 <Td>{user.name}</Td>
                 <Td>{user.surname}</Td>
 
-                <Td>
+                  <Td>
                   <Button
                     size="xs"
                     variant="outline"
@@ -75,29 +83,30 @@ export default function UserUI({ users}) {
         </Table>
       </TableContainer>
 
-      <FormControl
+        <FormControl
         id="username"
         display="flex"
         flexDirection="row"
-        justifyContent="space-between"
-      >
-        <Input m={1} type="text" placeholder="Username" />
-      </FormControl>
-      <FormControl m={1} id="name">
+        justifyContent="space-between" >
+                <Input m={1} type="text" placeholder="Username" />
+            </FormControl>
+        <FormControl m={1} id="name">
         <Input type="text" placeholder="Imię" />
       </FormControl>
-      <FormControl m={1} id="surname">
-        <Input type="text" placeholder="Nazwisko" />
+            <FormControl m={1} id="surname">
+          <Input type="text" placeholder="Nazwisko" />
       </FormControl>
       <Button
         m={1}
         size="sm"
-        //variant="outline"
+
         colorScheme="blue"
         onClick={() => handleAdd()}
       >
         Dodaj
       </Button>
-    </div>
-  );
+
+
+        </div>
+    );
 }

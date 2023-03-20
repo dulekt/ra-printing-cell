@@ -19,7 +19,7 @@ import {
 import { useEffect, useState } from 'react';
 
 export default function WorkcenterUI(
-  { 
+  {
     workcenters,
     printableLabels,
     isLoading,
@@ -31,11 +31,10 @@ export default function WorkcenterUI(
   const addWorkcenter = async workcenter => {
     console.log('workcenter', workcenter);
     console.log('labels', printableLabels);
-    //labels is an array of objects with label and isChecked properties
-    //filter labels to only include labels that are checked
+
     const labels = printableLabels.filter(label => label.isChecked);
-    //map labels to an array of label names
-    const labelsArray = labels.map(label => label.label);
+
+    const labelsArray = labels?.map(label => label.label);
     console.log('labelsArray', labelsArray);
     const response = await fetch('http://localhost:5000/workcenters', {
       method: 'POST',
@@ -49,8 +48,7 @@ export default function WorkcenterUI(
     });
     console.log('response', response);
 
-    fetchWorkcenters();
-    fetchLabels();
+
     document.getElementById('WC').value = '';
   };
 
@@ -103,7 +101,7 @@ export default function WorkcenterUI(
                 <Td>{workcenter.workcenter}</Td>
                 <Td>
                   <ol>
-                    {workcenter.printableLabels.map((label, index) => (
+                    {workcenter?.printableLabels?.map((label, index) => (
                       <li key={index}>{label}</li>
                     ))}
                   </ol>

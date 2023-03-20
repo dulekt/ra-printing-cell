@@ -2,21 +2,20 @@ import {
   Table,
   Thead,
   Tbody,
-  Tfoot,
+
   Tr,
   Th,
   Td,
-  TableCaption,
   TableContainer,
   Button,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
   SimpleGrid,
   Input,
   Box,
   Text,
+
+
+
   Select,
   Center,
 } from '@chakra-ui/react';
@@ -44,14 +43,12 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
       }),
     });
     const data = await response.json();
-    console.log(data);
+    console.log("data",data);
     //set form fields to empty
     document.getElementById('printerName').value = '';
     document.getElementById('printerIP').value = '';
     document.getElementById('printerPort').value = '';
     document.getElementById('printerDPI').value = '';
-
-    fetchPrinters();
   };
 
   const handleDelete = async id => {
@@ -65,7 +62,6 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
 
     const data = await response.json();
 
-    fetchPrinters();
   };
 
   return (
@@ -87,8 +83,8 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
           </FormControl>
           <FormControl id="workcenter">
             <Select type="text" placeholder="Workcenter">
-              //add options for every workcenter
-              {workcenters.map((workcenter, index) => (
+
+              {workcenters?.map((workcenter, index) => (
                 <option key={workcenter + index} value={workcenter}>
                   {workcenter}
                 </option>

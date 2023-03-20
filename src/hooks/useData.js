@@ -10,7 +10,8 @@ export default function useData() {
   const [isLoading, setIsLoading] = useState(true);
   const [isError, setIsError] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
-
+ const REFRESH_INTERVAL = 30000;
+ //! doesnt work as expected, refresh blings the whole page
   useEffect(() => {
     const paralellFetch = async () => {
         await Promise.all([
@@ -21,11 +22,13 @@ export default function useData() {
       ]);
     };
     paralellFetch();
-  }, []);
+    }, []);
+
+
 
   async function fetchData(apiPath) {
     setIsLoading(true);
-    const response = await fetch('http://localhost:5000/${apiPath}');
+    const response = await fetch(`http://localhost:5000/${apiPath}`);
     if (!response) {
       setIsError(true);
       setErrorMessage('No response from server');
@@ -65,6 +68,7 @@ export default function useData() {
       return;
     }
   }
+  console.log("use data hook");
   console.log('printers', printers);
   console.log('labels', labels);
   console.log('workcenters', workcenters);
@@ -77,5 +81,7 @@ export default function useData() {
     isLoading,
     isError,
     errorMessage,
+    fetchData
   };
 }
+

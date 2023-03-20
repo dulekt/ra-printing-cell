@@ -162,6 +162,6 @@ export default function LabelUI({labels,printers,isLoading,isError,errorMessage 
       </Center>}
 
     </Box>
-    
+
   );
 }

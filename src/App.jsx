@@ -1,19 +1,21 @@
-//import "App.css";
-import { Container, ChakraProvider } from '@chakra-ui/react';
-import AppHeader from '@/components/AppHeader';
+// import "App.css";
+import { ChakraProvider, Container } from '@chakra-ui/react';
+
+import '@/App.css';
 import AppContent from '@/components/AppContent';
 import AppFooter from '@/components/AppFooter';
-import '@/App.css';
+import AppHeader from '@/components/AppHeader';
+
 function App() {
-  return (
-    <ChakraProvider>
-      <Container>
-        <AppHeader />
-        <AppContent />
-        <AppFooter />
-      </Container>
-    </ChakraProvider>
-  );
+    return (
+        <ChakraProvider>
+            <Container>
+                <AppHeader />
+                <AppContent />
+                <AppFooter />
+            </Container>
+        </ChakraProvider>
+    );
 }
 
 export default App;
