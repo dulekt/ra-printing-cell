@@ -15,6 +15,10 @@ import {
     Tr,
 } from '@chakra-ui/react';
 
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+
 export default function LabelUI({ labels, printers, isLoading, isError, errorMessage }) {
     const handleAdd = async e => {
         const label = document.getElementById('label').value;
@@ -28,7 +32,7 @@ export default function LabelUI({ labels, printers, isLoading, isError, errorMes
 
         const lines_of_text = document.getElementById('lines_of_text').value;
 
-        const response = await fetch('http://localhost:5000/labels', {
+        const response = await fetch(`http://${ip}:${port}/labels`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -50,57 +54,64 @@ export default function LabelUI({ labels, printers, isLoading, isError, errorMes
     const handleDelete = async id => {
         console.log('id: ', id);
 
-        const response = await fetch(`http://localhost:5000/labels/${id}`, {
+        const response = await fetch(`http://${ip}:${port}/labels/${id}`, {
             method: 'DELETE',
         });
     };
 
     return (
         <Box p={2}>
-            <Box w="100%" p={1} color="green">
-                <SimpleGrid columns={6} spacing={1}>
-                    <FormControl id="label">
-                        <Input placeholder="Etykieta" />
-                    </FormControl>
-                    <FormControl id="label_width">
-                        <Input placeholder="Szerokość etykiety" />
-                    </FormControl>
-                    <FormControl id="label_height">
-                        <Input placeholder="Wysokość etykiety" />
-                    </FormControl>
-                    <FormControl id="ribbon_width">
-                        <Input placeholder="Szerokość taśmy" />
-                    </FormControl>
-                    <FormControl id="label_x0">
-                        <Input placeholder="x_0" />
-                    </FormControl>
+            {printers.length > 0 ? (
+                <Box w="100%" p={1} color="green">
+                    <SimpleGrid columns={6} spacing={1}>
+                        <FormControl id="label">
+                            <Input placeholder="Etykieta" />
+                        </FormControl>
+                        <FormControl id="label_width">
+                            <Input placeholder="Szerokość etykiety" />
+                        </FormControl>
+                        <FormControl id="label_height">
+                            <Input placeholder="Wysokość etykiety" />
+                        </FormControl>
+                        <FormControl id="ribbon_width">
+                            <Input placeholder="Szerokość taśmy" />
+                        </FormControl>
+                        <FormControl id="label_x0">
+                            <Input placeholder="x_0" />
+                        </FormControl>
 
-                    <FormControl id="font_size">
-                        <Input placeholder="Rozmiar czcionki" />
-                    </FormControl>
+                        <FormControl id="font_size">
+                            <Input placeholder="Rozmiar czcionki" />
+                        </FormControl>
 
-                    <FormControl id="labels_in_row">
-                        <Input placeholder="Ilość etykiet w rzędzie" />
-                    </FormControl>
-                    <FormControl id="print_cell_printer">
-                        <Select placeholder="Drukarka celka">
-                            {printers.map(printer => (
-                                <option key={printer.printerID}>{printer.printerName}</option>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl id="lines_of_text">
-                        <Input placeholder="Ilość linii tekstu" />
-                    </FormControl>
+                        <FormControl id="labels_in_row">
+                            <Input placeholder="Ilość etykiet w rzędzie" />
+                        </FormControl>
+                        <FormControl id="print_cell_printer">
+                            <Select placeholder="Drukarka celka">
+                                {printers.map(printer => (
+                                    <option key={printer.printerID}>{printer.printerName}</option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl id="lines_of_text">
+                            <Input placeholder="Ilość linii tekstu" />
+                        </FormControl>
 
-                    <Button m={1} size="sm" colorScheme="blue" onClick={handleAdd}>
-                        Dodaj
-                    </Button>
-                </SimpleGrid>
-            </Box>
+                        <Button m={1} size="sm" colorScheme="blue" onClick={handleAdd}>
+                            Dodaj
+                        </Button>
+                    </SimpleGrid>
+                </Box>
+            ) : (
+                <Text fontSize="l" fontWeight="bold" color="red.500">
+                    Najpierw przypiś przynajmniej jedną drukarkę celki!
+                </Text>
+            )}
+
             {isLoading && <Text>Ładowanie...</Text>}
             {isError && <Text>Błąd: {errorMessage}</Text>}
-            {!isLoading && !isError && (
+            {!isLoading && !isError && labels.length > 0 && (
                 <Center>
                     <Box p={1}>
                         <Table variant="simple">

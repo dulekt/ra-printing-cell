@@ -2,12 +2,14 @@ import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@c
 
 import ModalSpecialOrders from './ModalSpecialOrders';
 import Modal_Plastic from '@/components/Modal_Plastic';
+import server_data from '@/data/server_data';
 
+const { ip, port } = server_data();
 function handlePrint(id) {
     console.log(id);
 
     const sendPrintRequest = async id => {
-        const response = await fetch(`http://localhost:5000/print_cell/${id}`, {
+        const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -87,15 +89,15 @@ export default function OrderTable({ orders, fetchOrders }) {
                                                     size="sm"
                                                     onClick={() => handleClick(order.id)}
                                                 >
-                                                    Print
+                                                    Drukuj
                                                 </Button>
                                             );
 
                                         case 'Oznaczenia plastikowe':
-                                            return <Modal_Plastic order={order} />;
+                                            return <Modal_Plastic order={order} fetchOrders={fetchOrders} />;
 
                                         default:
-                                            return <ModalSpecialOrders order={order} />;
+                                            return <ModalSpecialOrders order={order} fetchOrders={fetchOrders} />;
                                     }
                                 })()}
                             </Td>

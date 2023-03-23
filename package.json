@@ -4,11 +4,11 @@
     "version": "0.0.0",
     "type": "module",
     "scripts": {
-        "dev": "vite",
+        "dev": "vite --host",
         "start": "vite serve",
         "build": "vite build",
         "preview": "vite preview",
-        "host": "vite --host",
+        "host": "vite ",
         "lint": "eslint --ext .js,.jsx,.ts,.tsx",
         "lint:fix": "eslint --ext .js,.jsx,.ts,.tsx --fix"
     },
@@ -18,6 +18,7 @@
         "@emotion/react": "^11.10.5",
         "@emotion/styled": "^11.10.5",
         "framer-motion": "^7.6.17",
+        "json-2-csv": "^4.0.0",
         "react": "^18.2.0",
         "react-dom": "^18.2.0"
     },

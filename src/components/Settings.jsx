@@ -17,13 +17,22 @@ export default function Settings() {
                 <Tabs align="center">
                     <TabList>
                         <Tab>Użytkownicy</Tab>
+                        <Tab>Workcenters</Tab>
                         <Tab>Etykiety</Tab>
                         <Tab>Drukarki</Tab>
-                        <Tab>Workcenters</Tab>
                     </TabList>
                     <TabPanels>
                         <TabPanel>
                             <UserUI users={users} isLoading={isLoading} isError={isError} errorMessage={errorMessage} />
+                        </TabPanel>{' '}
+                        <TabPanel>
+                            <WorkcenterUI
+                                workcenters={workcenters}
+                                labels={labels}
+                                isLoading={isLoading}
+                                isError={isError}
+                                errorMessage={errorMessage}
+                            />
                         </TabPanel>
                         <TabPanel>
                             <LabelUI
@@ -38,15 +47,6 @@ export default function Settings() {
                             <PrinterUI
                                 printers={printers}
                                 workcenters={workcenters}
-                                isLoading={isLoading}
-                                isError={isError}
-                                errorMessage={errorMessage}
-                            />
-                        </TabPanel>
-                        <TabPanel>
-                            <WorkcenterUI
-                                workcenters={workcenters}
-                                labels={labels}
                                 isLoading={isLoading}
                                 isError={isError}
                                 errorMessage={errorMessage}

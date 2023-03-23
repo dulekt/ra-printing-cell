@@ -15,6 +15,10 @@ import {
     Tr,
 } from '@chakra-ui/react';
 
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+
 export default function PrinterUI({ printers, workcenters, isLoading, isError, errorMessage }) {
     const handleAdd = async e => {
         const name = document.getElementById('printerName').value;
@@ -22,7 +26,7 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
         const printerPort = document.getElementById('printerPort').value;
         const printerDPI = document.getElementById('printerDPI').value;
         const workcenter = document.getElementById('workcenter').value;
-        const response = await fetch('http://localhost:5000/printers', {
+        const response = await fetch(`http://${ip}:${port}/printers`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -52,7 +56,7 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
     const handleDelete = async id => {
         console.log(id);
 
-        const response = await fetch(`http://localhost:5000/printers/${id}`, {
+        const response = await fetch(`http://${ip}:${port}/printers/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -64,39 +68,45 @@ export default function PrinterUI({ printers, workcenters, isLoading, isError, e
 
     return (
         <div>
-            <Box>
-                <Text>Dodaj nową drukarkę</Text>
-                <SimpleGrid columns={3} spacing={3}>
-                    <FormControl id="printerName">
-                        <Input type="text" placeholder="Printer Name" />
-                    </FormControl>
-                    <FormControl id="printerIP">
-                        <Input type="text" placeholder="IP" />
-                    </FormControl>
-                    <FormControl id="printerPort">
-                        <Input type="text" placeholder="Port" />
-                    </FormControl>
-                    <FormControl id="printerDPI">
-                        <Input type="text" placeholder="DPI" />
-                    </FormControl>
-                    <FormControl id="workcenter">
-                        <Select type="text" placeholder="Workcenter">
-                            {workcenters?.map((workcenter, index) => (
-                                <option key={index} value={workcenter.workcenter}>
-                                    {workcenter.workcenter}
-                                </option>
-                            ))}
-                        </Select>
-                    </FormControl>
-                    <Button colorScheme="blue" size="sm" onClick={handleAdd}>
-                        Dodaj
-                    </Button>
-                </SimpleGrid>
-            </Box>
+            {workcenters.length > 0 ? (
+                <Box>
+                    <Text>Dodaj nową drukarkę</Text>
+                    <SimpleGrid columns={3} spacing={3}>
+                        <FormControl id="printerName">
+                            <Input type="text" placeholder="Printer Name" />
+                        </FormControl>
+                        <FormControl id="printerIP">
+                            <Input type="text" placeholder="IP" />
+                        </FormControl>
+                        <FormControl id="printerPort">
+                            <Input type="text" placeholder="Port" />
+                        </FormControl>
+                        <FormControl id="printerDPI">
+                            <Input type="text" placeholder="DPI" />
+                        </FormControl>
+                        <FormControl id="workcenter">
+                            <Select type="text" placeholder="Workcenter">
+                                {workcenters?.map((workcenter, index) => (
+                                    <option key={index} value={workcenter.workcenter}>
+                                        {workcenter.workcenter}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <Button colorScheme="blue" size="sm" onClick={handleAdd}>
+                            Dodaj
+                        </Button>
+                    </SimpleGrid>
+                </Box>
+            ) : (
+                <Text color="red.500" fontWeight="bold" fontSize="l">
+                    Najpierw dodaj przynajmniej jeden Workcenter{' '}
+                </Text>
+            )}
             <h1>Drukarki</h1>
             {isLoading && <div>Loading...</div>}
             {isError && <div>ERROR {JSON.stringify(errorMessage)}</div>}
-            {!isLoading && !isError && (
+            {!isLoading && !isError && printers.length > 0 && (
                 <TableContainer>
                     <Table variant="simple">
                         <Thead>

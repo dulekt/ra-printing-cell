@@ -17,6 +17,10 @@ import {
     Tr,
 } from '@chakra-ui/react';
 
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+
 export default function WorkcenterUI({ workcenters, labels, isLoading, isError, errorMessage }) {
     const addWorkcenter = async workcenter => {
         console.log('workcenter', workcenter);
@@ -28,52 +32,51 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
         const labelsArray = checkedLabels?.map(label => label.label);
         console.log('labelsArray', labelsArray);
 
-        const response = await fetch('http://localhost:5000/workcenters', {
-            method: 'POST',
-            headers: {
-                'Content-type': 'application/json',
-            },
-            body: JSON.stringify({
-                workcenter,
-                printableLabels: labelsArray,
-            }),
-        });
+        const response = await fetch(
+            `http://${ip}:${port}/workcenters`,
+
+            {
+                method: 'POST',
+                headers: {
+                    'Content-type': 'application/json',
+                },
+                body: JSON.stringify({
+                    workcenter,
+                    printableLabels: printables,
+                }),
+            }
+        );
 
         console.log('response', response);
 
         document.getElementById('WC').value = '';
     };
 
-    const [printableLabels, setPrintableLabels] = useState(labels);
-
+    const [printables, setPrintables] = useState([]);
     const handleCheck = e => {
         const label = e.target.value;
         const isChecked = e.target.checked;
-        const newPrintableLabels = printableLabels.map(labelObj => {
-            if (labelObj.label === label) {
-                labelObj.isChecked = !labelObj.isChecked;
-            }
-
-            return labelObj;
-        });
-
-        setPrintableLabels(newPrintableLabels);
-
-        console.log(printableLabels);
+        if (isChecked) {
+            setPrintables([...printables, label]);
+        } else {
+            const newPrintableLabels = printables.filter(printableLabel => printableLabel !== label);
+            setPrintables(newPrintableLabels);
+        }
     };
 
+    console.log('printables:', printables);
+
     const deleteWorkcenter = async workcenterID => {
-        const response = await fetch(`http://localhost:5000/workcenters/${workcenterID}`, {
+        const response = await fetch(`http://${ip}:${port}/workcenters/${workcenterID}`, {
             method: 'DELETE',
         });
-
-        const data = await response.json();
     };
 
     return (
         <Box>
             {isLoading && <div>Loading...</div>}
             {isError && <div>{errorMessage}</div>}
+            {!isLoading && !isError && !workcenters.length && <div>Brak workcenterów</div>}
             {!isLoading && !isError && (
                 <TableContainer>
                     <Table variant="simple">
@@ -112,7 +115,6 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
                     </Table>
                 </TableContainer>
             )}
-
             <Box borderTop="1px solid #BBBBBB">
                 <FormControl id="WC">
                     <FormLabel>Dodaj nowy workcenter</FormLabel>
@@ -122,6 +124,7 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
                     <FormLabel>Etykiety</FormLabel>
                     <CheckboxGroup>
                         <Stack>
+                            {!labels && <div>Brak etykiet w systemie </div>}
                             {labels?.map((label, index) => (
                                 <Checkbox key={index} value={label.label} onChange={handleCheck}>
                                     {label.label}
@@ -130,12 +133,7 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
                         </Stack>
                     </CheckboxGroup>
                 </FormControl>
-                <Button
-                    onClick={() => addWorkcenter(document.getElementById('WC').value)}
-                    colorScheme="blue"
-                    size="sm"
-                    // variant="outline"
-                >
+                <Button onClick={() => addWorkcenter(document.getElementById('WC').value)} colorScheme="blue" size="sm">
                     Dodaj
                 </Button>
             </Box>

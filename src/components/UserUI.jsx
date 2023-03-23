@@ -1,12 +1,16 @@
 import { Button, FormControl, Input, Table, TableContainer, Tbody, Td, Th, Thead, Tr } from '@chakra-ui/react';
 
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+
 export default function UserUI({ users, refreshData }) {
     const handleAdd = async e => {
         const username = document.getElementById('username').value;
         const name = document.getElementById('name').value;
         const surname = document.getElementById('surname').value;
 
-        const response = await fetch('http://localhost:5000/users', {
+        const response = await fetch(`http://${ip}:${port}/users`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -26,7 +30,7 @@ export default function UserUI({ users, refreshData }) {
     };
 
     const handleDelete = async id => {
-        const response = await fetch(`http://localhost:5000/users/${id}`, {
+        const response = await fetch(`http://${ip}:${port}/users/${id}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,9 +1,12 @@
 import { useEffect, useState } from 'react';
 import { SettingsIcon } from '@chakra-ui/icons';
-import { Button, Container } from '@chakra-ui/react';
+import { Button, Container, Text } from '@chakra-ui/react';
 
 import OrderTable from '@/components/OrderTable';
 import Settings from '@/components/Settings';
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
 
 export default function AppContent() {
     // define state for orders
@@ -12,9 +15,7 @@ export default function AppContent() {
     const [ordersLoaded, setOrdersLoaded] = useState(false);
     // fetch orders from server every 5 seconds
     const fetchOrders = async () => {
-        setOrdersLoaded(false);
-
-        const response = await fetch('http://localhost:5000/orders');
+        const response = await fetch(`http://${ip}:${port}/orders`);
         const data = await response.json();
         setOrders(data);
 
@@ -23,10 +24,28 @@ export default function AppContent() {
 
     useEffect(() => {
         fetchOrders();
+
+        const interval = setInterval(() => {
+            fetchOrders();
+        }, 5000);
+
+        return () => clearInterval(interval);
     }, []);
 
-    const newOrders = orders?.filter(order => order.isPrinted === false);
-    const oldOrders = orders?.filter(order => order.isPrinted === true);
+    const newOrders = [];
+    const oldOrders = [];
+    try {
+        orders.forEach(order => {
+            if (order.isPrinted === false) {
+                newOrders.push(order);
+            } else {
+                oldOrders.push(order);
+            }
+        });
+    } catch (e) {
+        console.log(e);
+    }
+
     const [show, setShow] = useState(false);
     const handleToggle = () => setShow(!show);
 
@@ -41,17 +60,24 @@ export default function AppContent() {
             >
                 Settings
             </Button>
-            {!ordersLoaded && <div>Loading...</div>}
+
             {ordersLoaded && (
                 <Container>
                     {settingsOn && <Settings />}
                     {!settingsOn && (
                         <div>
-                            <OrderTable orders={newOrders} fetchOrders={fetchOrders} />
+                            {newOrders.length === 0 && (
+                                <Text fontSize="l" fontWeight="bold" color="green.500">
+                                    {' '}
+                                    Brak nowych zamówień
+                                </Text>
+                            )}
+                            {newOrders.length > 0 && <OrderTable orders={newOrders} fetchOrders={fetchOrders} />}
 
                             {oldOrders.length > 0 && (
                                 <Button colorScheme="green" variant="outline" onClick={handleToggle}>
-                                    Pokaż stare zamówienia
+                                    {!show && 'Pokaż'}
+                                    {show && 'Schowaj'} stare zamówienia
                                 </Button>
                             )}
                             {show && <OrderTable orders={oldOrders} />}

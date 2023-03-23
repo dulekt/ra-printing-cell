@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
     Button,
     Modal,
@@ -12,12 +13,32 @@ import {
     Th,
     Thead,
     Tr,
+    useClipboard,
     useDisclosure,
 } from '@chakra-ui/react';
+import { json2csv } from 'json-2-csv';
 
-export default function Modal_Plastic({ order }) {
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+function handlePrint(id) {
+    const sendPrintRequest = async id => {
+        const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+        console.log('id', id, 'data', data);
+    };
+
+    sendPrintRequest(id);
+}
+
+export default function Modal_Plastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-
     function countValues(list) {
         const counts = {};
         list.forEach(x => {
@@ -27,18 +48,43 @@ export default function Modal_Plastic({ order }) {
         return counts;
     }
 
+    function handleClick(id) {
+        handlePrint(id);
+
+        fetchOrders();
+    }
+
     const valueCounts = countValues(order.content);
-    const grupa = `${order.id}|${order.user}|${order.workcenter}`;
-    const nosnik = order.labelType;
+    const grupa = `${order.id} l ${order.user} l ${order.workcenter}`;
+    const nosnik = order.labelType.split('-')[0];
+    const { onCopy, setValue, hasCopied } = useClipboard('');
+    async function prepareCopyData() {
+        const data = Object.entries(valueCounts).map(([value, count]) => ({
+            Grupa: grupa,
+            Tresc: value,
+            Ilosc: count,
+            Nosnik: nosnik,
+        }));
+
+        const csv = await json2csv(data);
+        const tabDelimited = csv.replaceAll(',', '	');
+        setValue(tabDelimited);
+    }
+
+    async function handleCopy() {
+        await prepareCopyData();
+
+        onCopy();
+    }
 
     return (
         <>
-            <Button colorScheme="green" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
-                Grawerka
+            <Button colorScheme="red" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
+                Pulsar
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
-                <ModalOverlay />
+                <ModalOverlay bg="none" backdropFilter="auto" backdropInvert="30%" backdropBlur="5px" />
                 <ModalContent>
                     <ModalCloseButton />
                     <ModalBody>
@@ -51,7 +97,7 @@ export default function Modal_Plastic({ order }) {
                                     <Th>Nosnik</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody>
+                            <Tbody id="pulsar-table">
                                 {Object.entries(valueCounts).map(([value, count]) => (
                                     <Tr key={value + count}>
                                         <Td>{grupa}</Td>
@@ -64,13 +110,27 @@ export default function Modal_Plastic({ order }) {
                         </Table>
                     </ModalBody>
                     <ModalFooter>
-                        {
-                            // todo copy to clipboard secondary action
-                            // todo mark in db as printed true
-                        }
-                        <Button colorScheme="red" mr={3} variant="outline" size="sm" tooltip="Copy to clipboard">
-                            Copy to clipboard
+                        <Button
+                            colorScheme="blue"
+                            mr={3}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleClick(order.id)}
+                        >
+                            Wykonane
                         </Button>
+                        {/*
+                            // todo implement in the future copy to clipboard
+                            <Button
+                                colorScheme="blue"
+                                mr={3}
+                                variant="outline"
+                                size="sm"
+                                tooltip="Copy to clipboard"
+                                onClick={handleCopy}
+                            >
+                                {hasCopied ? 'Copied!' : 'Copy to clipboard'}
+                            </Button> */}
                         <Button colorScheme="blue" mr={3} size="sm" onClick={onClose}>
                             Zamknij
                         </Button>
