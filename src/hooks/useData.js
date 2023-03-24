@@ -1,7 +1,7 @@
 //  useData.jsx
 
 import { useEffect, useState } from 'react';
-
+const ip = '10.76.18.176';
 export default function useData() {
     const [printers, setPrinters] = useState([]);
     const [labels, setLabels] = useState([]);
@@ -33,7 +33,7 @@ export default function useData() {
     async function fetchData(apiPath) {
         setIsLoading(true);
 
-        const response = await fetch(`http://localhost:5000/${apiPath}`);
+        const response = await fetch(`http://${ip}:5000/${apiPath}`);
         if (!response) {
             setIsError(true);
 
