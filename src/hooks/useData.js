@@ -1,7 +1,9 @@
 //  useData.jsx
 
 import { useEffect, useState } from 'react';
+
 const ip = '10.76.18.176';
+
 export default function useData() {
     const [printers, setPrinters] = useState([]);
     const [labels, setLabels] = useState([]);
