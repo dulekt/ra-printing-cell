@@ -119,18 +119,19 @@ export default function Modal_Plastic({ order, fetchOrders }) {
                         >
                             Wykonane
                         </Button>
-                        {/*
+                        {
                             // todo implement in the future copy to clipboard
                             <Button
-                                colorScheme="blue"
+                                colorScheme={hasCopied ? 'green' : 'blue'}
                                 mr={3}
                                 variant="outline"
                                 size="sm"
                                 tooltip="Copy to clipboard"
                                 onClick={handleCopy}
                             >
-                                {hasCopied ? 'Copied!' : 'Copy to clipboard'}
-                            </Button> */}
+                                {hasCopied ? 'Skopiowane!' : 'Kopiuj do schowka'}
+                            </Button>
+                        }
                         <Button colorScheme="blue" mr={3} size="sm" onClick={onClose}>
                             Zamknij
                         </Button>

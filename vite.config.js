@@ -11,5 +11,3 @@ export default defineConfig({
         open: '/docs/index.html',
     },
 });
-
- j
