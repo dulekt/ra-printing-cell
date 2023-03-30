@@ -17,26 +17,7 @@ import {
 } from '@chakra-ui/react';
 import { json2csv } from 'json-2-csv';
 
-import server_data from '@/data/server_data';
-
-const { ip, port } = server_data();
-function handlePrint(id) {
-    const sendPrintRequest = async id => {
-        const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
-
-        const data = await response.json();
-        console.log('id', id, 'data', data);
-    };
-
-    sendPrintRequest(id);
-}
-
-export default function Modal_Plastic({ order, fetchOrders }) {
+export default function ModalLabels({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     function countValues(list) {
         const counts = {};
@@ -78,8 +59,8 @@ export default function Modal_Plastic({ order, fetchOrders }) {
 
     return (
         <>
-            <Button colorScheme="red" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
-                Pulsar
+            <Button colorScheme="blue" size="sm" onClick={onOpen} variant="outline">
+                Content
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">

@@ -1,5 +1,6 @@
 import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@chakra-ui/react';
 
+import ModalLabels from './ModalLabels';
 import ModalSpecialOrders from './ModalSpecialOrders';
 import Modal_Plastic from '@/components/Modal_Plastic';
 import server_data from '@/data/server_data';
@@ -83,14 +84,19 @@ export default function OrderTable({ orders, fetchOrders }) {
                                     switch (order?.order_type) {
                                         case 'Naklejki':
                                             return (
-                                                <Button
-                                                    colorScheme="blue"
-                                                    variant={order.isPrinted ? 'outline' : 'solid'}
-                                                    size="sm"
-                                                    onClick={() => handleClick(order.id)}
-                                                >
-                                                    Drukuj
-                                                </Button>
+                                                <>
+                                                    {/*
+                                                    //todo implement show content for labels
+                                                    <ModalLabels order={order} fetchOrders={fetchOrders} /> */}
+                                                    <Button
+                                                        colorScheme="blue"
+                                                        variant={order.isPrinted ? 'outline' : 'solid'}
+                                                        size="sm"
+                                                        onClick={() => handleClick(order.id)}
+                                                    >
+                                                        Drukuj
+                                                    </Button>
+                                                </>
                                             );
 
                                         case 'Oznaczenia plastikowe':
