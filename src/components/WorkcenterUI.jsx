@@ -77,6 +77,28 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
             {isLoading && <div>Loading...</div>}
             {isError && <div>{errorMessage}</div>}
             {!isLoading && !isError && !workcenters.length && <div>Brak workcenterów</div>}
+            <Box borderTop="1px solid #BBBBBB">
+                <FormControl id="WC">
+                    <FormLabel>Dodaj nowy workcenter</FormLabel>
+                    <Input type="text" placeholder="Workcenter" />
+                </FormControl>
+                <FormControl id="labels">
+                    <FormLabel>Etykiety</FormLabel>
+                    <CheckboxGroup>
+                        <Stack>
+                            {!labels && <div>Brak etykiet w systemie </div>}
+                            {labels?.map((label, index) => (
+                                <Checkbox key={index} value={label.label} onChange={handleCheck}>
+                                    {label.label}
+                                </Checkbox>
+                            ))}
+                        </Stack>
+                    </CheckboxGroup>
+                </FormControl>
+                <Button onClick={() => addWorkcenter(document.getElementById('WC').value)} colorScheme="blue" size="sm">
+                    Dodaj
+                </Button>
+            </Box>
             {!isLoading && !isError && (
                 <TableContainer>
                     <Table variant="simple">
@@ -115,28 +137,6 @@ export default function WorkcenterUI({ workcenters, labels, isLoading, isError, 
                     </Table>
                 </TableContainer>
             )}
-            <Box borderTop="1px solid #BBBBBB">
-                <FormControl id="WC">
-                    <FormLabel>Dodaj nowy workcenter</FormLabel>
-                    <Input type="text" placeholder="Workcenter" />
-                </FormControl>
-                <FormControl id="labels">
-                    <FormLabel>Etykiety</FormLabel>
-                    <CheckboxGroup>
-                        <Stack>
-                            {!labels && <div>Brak etykiet w systemie </div>}
-                            {labels?.map((label, index) => (
-                                <Checkbox key={index} value={label.label} onChange={handleCheck}>
-                                    {label.label}
-                                </Checkbox>
-                            ))}
-                        </Stack>
-                    </CheckboxGroup>
-                </FormControl>
-                <Button onClick={() => addWorkcenter(document.getElementById('WC').value)} colorScheme="blue" size="sm">
-                    Dodaj
-                </Button>
-            </Box>
         </Box>
     );
 }

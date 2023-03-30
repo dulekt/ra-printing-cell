@@ -42,7 +42,21 @@ export default function UserUI({ users, refreshData }) {
 
     return (
         <div>
-            <h1>Użytkownicy</h1>
+            <div>
+                <FormControl id="username" display="flex" flexDirection="row" justifyContent="space-between">
+                    <Input m={1} type="text" placeholder="Username" />
+                </FormControl>
+                <FormControl m={1} id="name">
+                    <Input type="text" placeholder="Imię" />
+                </FormControl>
+                <FormControl m={1} id="surname">
+                    <Input type="text" placeholder="Nazwisko" />
+                </FormControl>
+                <Button m={1} size="sm" colorScheme="blue" onClick={() => handleAdd()}>
+                    Dodaj
+                </Button>
+            </div>
+            <h1>User List</h1>
             <TableContainer>
                 <Table variant="simple">
                     <Thead>
@@ -75,19 +89,6 @@ export default function UserUI({ users, refreshData }) {
                     </Tbody>
                 </Table>
             </TableContainer>
-
-            <FormControl id="username" display="flex" flexDirection="row" justifyContent="space-between">
-                <Input m={1} type="text" placeholder="Username" />
-            </FormControl>
-            <FormControl m={1} id="name">
-                <Input type="text" placeholder="Imię" />
-            </FormControl>
-            <FormControl m={1} id="surname">
-                <Input type="text" placeholder="Nazwisko" />
-            </FormControl>
-            <Button m={1} size="sm" colorScheme="blue" onClick={() => handleAdd()}>
-                Dodaj
-            </Button>
         </div>
     );
 }

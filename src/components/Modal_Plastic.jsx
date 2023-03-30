@@ -120,7 +120,6 @@ export default function Modal_Plastic({ order, fetchOrders }) {
                             Wykonane
                         </Button>
                         {
-                            // todo implement in the future copy to clipboard
                             <Button
                                 colorScheme={hasCopied ? 'green' : 'blue'}
                                 mr={3}
