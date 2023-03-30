@@ -22,6 +22,10 @@ export default function UserUI({ users, refreshData }) {
             }),
         });
 
+        {
+            //! here to add function that updates printers array
+        }
+
         document.getElementById('username').value = '';
 
         document.getElementById('name').value = '';
