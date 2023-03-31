@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import {
     Button,
     Modal,
@@ -17,28 +18,53 @@ import {
 } from '@chakra-ui/react';
 import { json2csv } from 'json-2-csv';
 
-export default function ModalLabels({ order, fetchOrders }) {
+import server_data from '@/data/server_data';
+
+const { ip, port } = server_data();
+
+const handlePrint = async id => {
+    const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+    console.log('id', id, 'data', data);
+};
+
+const countValues = list => {
+    const counts = {};
+
+    list.forEach(x => {
+        counts[x] = (counts[x] || 0) + 1;
+    });
+
+    return counts;
+};
+
+export default function ModalPlastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    function countValues(list) {
-        const counts = {};
-        list.forEach(x => {
-            counts[x] = (counts[x] || 0) + 1;
-        });
+    const { onCopy, setValue, hasCopied } = useClipboard('', 500);
+    const { content } = order;
 
-        return counts;
-    }
+    const handleClick = async id => {
+        await handlePrint(id);
 
-    function handleClick(id) {
-        handlePrint(id);
+        await fetchOrders();
+    };
 
-        fetchOrders();
-    }
+    const { valueCounts, grupa, nosnik } = useMemo(
+        () => ({
+            valueCounts: countValues(order.content),
+            grupa: `${order.id} l ${order.user} l ${order.workcenter}`,
+            nosnik: order.labelType.split('-')[0],
+        }),
+        [order]
+    );
 
-    const valueCounts = countValues(order.content);
-    const grupa = `${order.id} l ${order.user} l ${order.workcenter}`;
-    const nosnik = order.labelType.split('-')[0];
-    const { onCopy, setValue, hasCopied } = useClipboard('');
-    async function prepareCopyData() {
+    const handleCopy = useCallback(async () => {
         const data = Object.entries(valueCounts).map(([value, count]) => ({
             Grupa: grupa,
             Tresc: value,
@@ -46,20 +72,20 @@ export default function ModalLabels({ order, fetchOrders }) {
             Nosnik: nosnik,
         }));
 
-        const csv = await json2csv(data);
-        const tabDelimited = csv.replaceAll(',', '	');
-        setValue(tabDelimited);
-    }
+        const csv = await json2csv(data, {
+            delimiter: {
+                field: '	',
+            },
+        });
 
-    async function handleCopy() {
-        await prepareCopyData();
+        setValue(csv);
 
         onCopy();
-    }
+    }, [valueCounts, grupa, nosnik]);
 
     return (
         <>
-            <Button colorScheme="blue" size="sm" onClick={onOpen} variant="outline">
+            <Button colorScheme="blue" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
                 Pokaż
             </Button>
 
@@ -71,25 +97,28 @@ export default function ModalLabels({ order, fetchOrders }) {
                         <Table variant="striped">
                             <Thead>
                                 <Tr>
-                                    <Th>Grupa</Th>
                                     <Th>Tresc</Th>
-                                    <Th>Ilość</Th>
-                                    <Th>Nosnik</Th>
                                 </Tr>
                             </Thead>
-                            <Tbody id="pulsar-table">
-                                {Object.entries(valueCounts).map(([value, count]) => (
-                                    <Tr key={value + count}>
-                                        <Td>{grupa}</Td>
+                            <Tbody id="label-table">
+                                {content.map((value, index) => (
+                                    <Tr key={index}>
                                         <Td>{value}</Td>
-                                        <Td>{count}</Td>
-                                        <Td>{nosnik}</Td>
                                     </Tr>
                                 ))}
                             </Tbody>
                         </Table>
                     </ModalBody>
                     <ModalFooter>
+                        <Button
+                            colorScheme="blue"
+                            mr={3}
+                            variant="outline"
+                            size="sm"
+                            onClick={() => handleClick(order.id)}
+                        >
+                            Wykonane
+                        </Button>
                         {
                             <Button
                                 colorScheme={hasCopied ? 'green' : 'blue'}
@@ -102,10 +131,7 @@ export default function ModalLabels({ order, fetchOrders }) {
                                 {hasCopied ? 'Skopiowane!' : 'Kopiuj do schowka'}
                             </Button>
                         }
-                        <Button colorScheme="blue" mr={3} size="sm" onClick={() => handleClick(order.id)}>
-                            Drukuj
-                        </Button>
-                        <Button colorScheme="red" mr={3} size="sm" onClick={onClose} variant="outline">
+                        <Button colorScheme="blue" mr={3} size="sm" onClick={onClose}>
                             Zamknij
                         </Button>
                     </ModalFooter>

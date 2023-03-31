@@ -2,7 +2,7 @@ import { Button, Table, Tbody, Td, Text, Th, Thead, Tr, useDisclosure } from '@c
 
 import ModalLabels from './ModalLabels';
 import ModalSpecialOrders from './ModalSpecialOrders';
-import Modal_Plastic from '@/components/Modal_Plastic';
+import ModalPlastic from '@/components/ModalPlastic';
 import server_data from '@/data/server_data';
 
 const { ip, port } = server_data();
@@ -86,7 +86,7 @@ export default function OrderTable({ orders, fetchOrders }) {
                                             return <ModalLabels order={order} fetchOrders={fetchOrders} />;
 
                                         case 'Oznaczenia plastikowe':
-                                            return <Modal_Plastic order={order} fetchOrders={fetchOrders} />;
+                                            return <ModalPlastic order={order} fetchOrders={fetchOrders} />;
 
                                         default:
                                             return <ModalSpecialOrders order={order} fetchOrders={fetchOrders} />;
