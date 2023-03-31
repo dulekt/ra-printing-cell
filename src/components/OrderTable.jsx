@@ -76,7 +76,10 @@ export default function OrderTable({ orders, fetchOrders }) {
                         <Tr key={order.id}>
                             <Td>{getDate(order?.datetime)}</Td>
                             <Td>{getTime(order?.datetime)}</Td>
-                            <Td>{order?.order_type}</Td>
+                            <Td>
+                                {`${order?.order_type}`}{' '}
+                                {order?.order_type === 'Naklejki' ? `${order?.labelType}` : ` `}
+                            </Td>
                             <Td>{order?.user}</Td>
                             <Td>{order?.workcenter}</Td>
                             <Td>
