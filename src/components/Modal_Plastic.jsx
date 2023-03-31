@@ -1,3 +1,4 @@
+import { useCallback, useMemo } from 'react';
 import {
     Button,
     Modal,
@@ -20,44 +21,49 @@ import { json2csv } from 'json-2-csv';
 import server_data from '@/data/server_data';
 
 const { ip, port } = server_data();
-function handlePrint(id) {
-    const sendPrintRequest = async id => {
-        const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
 
-        const data = await response.json();
-        console.log('id', id, 'data', data);
-    };
+const handlePrint = async id => {
+    const response = await fetch(`http://${ip}:${port}/print_cell/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
 
-    sendPrintRequest(id);
-}
+    const data = await response.json();
+    console.log('id', id, 'data', data);
+};
+
+const countValues = list => {
+    const counts = {};
+
+    list.forEach(x => {
+        counts[x] = (counts[x] || 0) + 1;
+    });
+
+    return counts;
+};
 
 export default function Modal_Plastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    function countValues(list) {
-        const counts = {};
-        list.forEach(x => {
-            counts[x] = (counts[x] || 0) + 1;
-        });
+    const { onCopy, setValue, hasCopied } = useClipboard('', 0);
 
-        return counts;
-    }
+    const handleClick = async id => {
+        await handlePrint(id);
 
-    function handleClick(id) {
-        handlePrint(id);
+        await fetchOrders();
+    };
 
-        fetchOrders();
-    }
+    const { valueCounts, grupa, nosnik } = useMemo(
+        () => ({
+            valueCounts: countValues(order.content),
+            grupa: `${order.id} l ${order.user} l ${order.workcenter}`,
+            nosnik: order.labelType.split('-')[0],
+        }),
+        [order]
+    );
 
-    const valueCounts = countValues(order.content);
-    const grupa = `${order.id} l ${order.user} l ${order.workcenter}`;
-    const nosnik = order.labelType.split('-')[0];
-    const { onCopy, setValue, hasCopied } = useClipboard('');
-    async function prepareCopyData() {
+    const handleCopy = useCallback(async () => {
         const data = Object.entries(valueCounts).map(([value, count]) => ({
             Grupa: grupa,
             Tresc: value,
@@ -65,16 +71,16 @@ export default function Modal_Plastic({ order, fetchOrders }) {
             Nosnik: nosnik,
         }));
 
-        const csv = await json2csv(data);
-        const tabDelimited = csv.replaceAll(',', '	');
-        setValue(tabDelimited);
-    }
+        const csv = await json2csv(data, {
+            delimiter: {
+                field: '	',
+            },
+        });
 
-    async function handleCopy() {
-        await prepareCopyData();
+        setValue(csv);
 
         onCopy();
-    }
+    }, [valueCounts, grupa, nosnik]);
 
     return (
         <>
