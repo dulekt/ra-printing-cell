@@ -6,6 +6,7 @@ import {
     ModalCloseButton,
     ModalContent,
     ModalFooter,
+    ModalHeader,
     ModalOverlay,
     Table,
     Tbody,
@@ -47,7 +48,7 @@ const countValues = list => {
 export default function ModalPlastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { onCopy, setValue, hasCopied } = useClipboard('', 500);
-    const { content } = order;
+    const { content,user,labelType,workcenter } = order;
 
     const handleClick = async id => {
         await handlePrint(id);
@@ -94,6 +95,9 @@ export default function ModalPlastic({ order, fetchOrders }) {
                 <ModalContent>
                     <ModalCloseButton />
                     <ModalBody>
+                        <ModalHeader>
+                            {user} : {labelType} : {workcenter}
+                        </ModalHeader>
                         <Table variant="striped">
                             <Thead>
                                 <Tr>
