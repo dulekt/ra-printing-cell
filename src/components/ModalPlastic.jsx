@@ -36,7 +36,7 @@ function handlePrint(id) {
     sendPrintRequest(id);
 }
 
-export default function Modal_Plastic({ order, fetchOrders }) {
+export default function ModalPlastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     function countValues(list) {
         const counts = {};

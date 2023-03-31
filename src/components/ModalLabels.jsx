@@ -60,7 +60,7 @@ export default function ModalLabels({ order, fetchOrders }) {
     return (
         <>
             <Button colorScheme="blue" size="sm" onClick={onOpen} variant="outline">
-                Content
+                Pokaż
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
@@ -90,20 +90,11 @@ export default function ModalLabels({ order, fetchOrders }) {
                         </Table>
                     </ModalBody>
                     <ModalFooter>
-                        <Button
-                            colorScheme="blue"
-                            mr={3}
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleClick(order.id)}
-                        >
-                            Wykonane
-                        </Button>
                         {
                             <Button
                                 colorScheme={hasCopied ? 'green' : 'blue'}
                                 mr={3}
-                                variant="outline"
+                                variant={hasCopied ? 'solid' : 'outline'}
                                 size="sm"
                                 tooltip="Copy to clipboard"
                                 onClick={handleCopy}
@@ -111,7 +102,10 @@ export default function ModalLabels({ order, fetchOrders }) {
                                 {hasCopied ? 'Skopiowane!' : 'Kopiuj do schowka'}
                             </Button>
                         }
-                        <Button colorScheme="blue" mr={3} size="sm" onClick={onClose}>
+                        <Button colorScheme="blue" mr={3} size="sm" onClick={() => handleClick(order.id)}>
+                            Drukuj
+                        </Button>
+                        <Button colorScheme="red" mr={3} size="sm" onClick={onClose} variant="outline">
                             Zamknij
                         </Button>
                     </ModalFooter>

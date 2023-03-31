@@ -83,21 +83,7 @@ export default function OrderTable({ orders, fetchOrders }) {
                                 {(() => {
                                     switch (order?.order_type) {
                                         case 'Naklejki':
-                                            return (
-                                                <>
-                                                    {/*
-                                                    //todo implement show content for labels
-                                                    <ModalLabels order={order} fetchOrders={fetchOrders} /> */}
-                                                    <Button
-                                                        colorScheme="blue"
-                                                        variant={order.isPrinted ? 'outline' : 'solid'}
-                                                        size="sm"
-                                                        onClick={() => handleClick(order.id)}
-                                                    >
-                                                        Drukuj
-                                                    </Button>
-                                                </>
-                                            );
+                                            return <ModalLabels order={order} fetchOrders={fetchOrders} />;
 
                                         case 'Oznaczenia plastikowe':
                                             return <Modal_Plastic order={order} fetchOrders={fetchOrders} />;
