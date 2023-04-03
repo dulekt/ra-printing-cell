@@ -48,7 +48,7 @@ const countValues = list => {
 export default function ModalPlastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
     const { onCopy, setValue, hasCopied } = useClipboard('', 500);
-    const { content,user,labelType,workcenter } = order;
+    const { content, user, labelType, workcenter } = order;
 
     const handleClick = async id => {
         await handlePrint(id);
