@@ -121,7 +121,7 @@ export default function ModalPlastic({ order, fetchOrders }) {
                             size="sm"
                             onClick={() => handleClick(order.id)}
                         >
-                            Wykonane
+                            Drukuj
                         </Button>
                         {
                             <Button
