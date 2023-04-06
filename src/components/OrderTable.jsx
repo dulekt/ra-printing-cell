@@ -64,7 +64,7 @@ export default function OrderTable({ orders, fetchOrders }) {
                 </Thead>
                 <Tbody>
                     {orders?.map(order => (
-                        <Tr key={order.id}>
+                        <Tr key={order.id} color={order.user === 'DRelic' ? 'red.200' : 'black'}>
                             <Td>{getDateTime(order?.datetime)?.DDMM}</Td>
                             <Td>{getDateTime(order?.datetime)?.HHMM}</Td>
                             <Td>
