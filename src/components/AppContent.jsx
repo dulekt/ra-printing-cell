@@ -17,6 +17,9 @@ export default function AppContent() {
     const fetchOrders = async () => {
         const response = await fetch(`http://${ip}:${port}/orders`);
         const data = await response.json();
+
+        data.sort((a, b) => new Date(b.datetime) - new Date(a.datetime));
+
         setOrders(data);
 
         setOrdersLoaded(true);
