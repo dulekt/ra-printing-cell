@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { CSVLink } from 'react-csv';
 import {
     Button,
     Modal,
@@ -35,19 +36,8 @@ const handlePrint = async id => {
     console.log('id', id, 'data', data);
 };
 
-const countValues = list => {
-    const counts = {};
-
-    list.forEach(x => {
-        counts[x] = (counts[x] || 0) + 1;
-    });
-
-    return counts;
-};
-
 export default function ModalPlastic({ order, fetchOrders }) {
     const { isOpen, onOpen, onClose } = useDisclosure();
-    const { onCopy, setValue, hasCopied } = useClipboard('', 500);
     const { content, user, labelType, workcenter } = order;
 
     const handleClick = async id => {
@@ -56,33 +46,15 @@ export default function ModalPlastic({ order, fetchOrders }) {
         await fetchOrders();
     };
 
-    const { valueCounts, grupa, nosnik } = useMemo(
-        () => ({
-            valueCounts: countValues(order.content),
-            grupa: `${order.id} l ${order.user} l ${order.workcenter}`,
-            nosnik: order.labelType.split('-')[0],
-        }),
-        [order]
-    );
-
-    const handleCopy = useCallback(async () => {
-        const data = Object.entries(valueCounts).map(([value, count]) => ({
-            Grupa: grupa,
-            Tresc: value,
-            Ilosc: count,
-            Nosnik: nosnik,
-        }));
-
-        const csv = await json2csv(data, {
-            delimiter: {
-                field: '	',
-            },
+    // function takes an array and retuns array of arrays
+    const getArray = array => {
+        const newArray = [[`Etykieta: ${order.labelType}`]];
+        array.forEach(element => {
+            newArray.push([` ${element}`]);
         });
 
-        setValue(csv);
-
-        onCopy();
-    }, [valueCounts, grupa, nosnik]);
+        return newArray;
+    };
 
     return (
         <>
@@ -123,18 +95,9 @@ export default function ModalPlastic({ order, fetchOrders }) {
                         >
                             Drukuj
                         </Button>
-                        {
-                            <Button
-                                colorScheme={hasCopied ? 'green' : 'blue'}
-                                mr={3}
-                                variant={hasCopied ? 'solid' : 'outline'}
-                                size="sm"
-                                tooltip="Copy to clipboard"
-                                onClick={handleCopy}
-                            >
-                                {hasCopied ? 'Skopiowane!' : 'Kopiuj do schowka'}
-                            </Button>
-                        }
+                        <Button colorScheme="green" variant="outline" mr={3} size="sm">
+                            <CSVLink data={getArray(order.content)}>Sćiągnij Excel</CSVLink>{' '}
+                        </Button>
                         <Button colorScheme="blue" mr={3} size="sm" onClick={onClose}>
                             Zamknij
                         </Button>
