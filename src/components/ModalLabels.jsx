@@ -46,9 +46,8 @@ export default function ModalPlastic({ order, fetchOrders }) {
         await fetchOrders();
     };
 
-    // function takes an array and retuns array of arrays
     const getArray = array => {
-        const newArray = [[`Etykieta: ${order.labelType}`]];
+        const newArray = [[]];
         array.forEach(element => {
             newArray.push([` ${element}`]);
         });
