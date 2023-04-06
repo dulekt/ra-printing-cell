@@ -24,24 +24,15 @@ function handlePrint(id) {
     sendPrintRequest(id);
 }
 
-function getDate(datetime) {
-    const fullDate = datetime?.split('T')[0];
+function getDateTime(datetime) {
+    // changet timezone to =7h
+    const createdAt = new Date(datetime);
+    const createdAtPlus7h = new Date(createdAt.getTime() + 7 * 60 * 60 * 1000);
+    const time = createdAtPlus7h?.toLocaleTimeString('pl-PL', { hour12: false });
+    const HHMM = time?.split(':')?.slice(0, 2).join(':');
+    const DDMM = createdAtPlus7h?.toLocaleDateString('pl-PL', { day: '2-digit', month: '2-digit' });
 
-    const reverseDate = fullDate?.split('-')?.reverse();
-    const DD = reverseDate[0];
-    const MM = reverseDate[1];
-    const date = `${DD}/${MM}`;
-
-    return date;
-}
-
-function getTime(datetime) {
-    const time = datetime?.split('T')[1].split('.')[0];
-    const HH = time?.split(':')[0];
-    const MM = time?.split(':')[1];
-    const HHMM = `${HH}:${MM}`;
-
-    return HHMM;
+    return { HHMM, DDMM };
 }
 
 export default function OrderTable({ orders, fetchOrders }) {
@@ -74,8 +65,8 @@ export default function OrderTable({ orders, fetchOrders }) {
                 <Tbody>
                     {orders?.map(order => (
                         <Tr key={order.id}>
-                            <Td>{getDate(order?.datetime)}</Td>
-                            <Td>{getTime(order?.datetime)}</Td>
+                            <Td>{getDateTime(order?.datetime)?.DDMM}</Td>
+                            <Td>{getDateTime(order?.datetime)?.HHMM}</Td>
                             <Td>
                                 {`${order?.order_type}`}{' '}
                                 {order?.order_type === 'Naklejki' ? `${order?.labelType}` : ` `}
