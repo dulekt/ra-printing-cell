@@ -42,8 +42,13 @@ export default function ModalSpecialOrders({ order, fetchOrders }) {
 
     return (
         <>
-            <Button colorScheme="green" size="sm" onClick={onOpen} variant={order.isPrinted ? 'outline' : 'solid'}>
-                Special
+            <Button
+                colorScheme={order.order_type === 'Grawerki' ? 'green' : 'purple'}
+                size="sm"
+                onClick={onOpen}
+                variant={order.isPrinted ? 'outline' : 'solid'}
+            >
+                {order.order_type === 'Grawerki' ? 'Grawerki' : 'Wydruki'}
             </Button>
 
             <Modal isOpen={isOpen} onClose={onClose} size="xl">
