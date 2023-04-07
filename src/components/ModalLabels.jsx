@@ -47,9 +47,9 @@ export default function ModalPlastic({ order, fetchOrders }) {
     };
 
     const getArray = array => {
-        const newArray = [[]];
+        const newArray = [];
         array.forEach(element => {
-            newArray.push([` ${element}`]);
+            newArray.push([` ${element} `]);
         });
 
         return newArray;
