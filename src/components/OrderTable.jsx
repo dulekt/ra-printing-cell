@@ -6,6 +6,21 @@ import ModalPlastic from '@/components/ModalPlastic';
 import server_data from '@/data/server_data';
 
 const { ip, port } = server_data();
+
+function updateIsPrinted(id) {
+    const updateIsPrintedRequest = async id => {
+        const response = await fetch(`http://${ip}:${port}/update_is_printed/${id}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+        console.log(data);
+    };
+}
+
 function handlePrint(id) {
     console.log(id);
 
@@ -60,6 +75,7 @@ export default function OrderTable({ orders, fetchOrders }) {
                         <Th>Imie</Th>
                         <Th>Stanowisko</Th>
                         <Th>Print</Th>
+                        <Th>Wykonane</Th>
                     </Tr>
                 </Thead>
                 <Tbody>
@@ -86,6 +102,16 @@ export default function OrderTable({ orders, fetchOrders }) {
                                             return <ModalSpecialOrders order={order} fetchOrders={fetchOrders} />;
                                     }
                                 })()}
+                            </Td>
+                            <Td>
+                                <Button
+                                    colorScheme="green"
+                                    size="sm"
+                                    onClick={() => updateIsPrinted(order.id)}
+                                    variant={order.isPrinted ? 'outline' : 'solid'}
+                                >
+                                    X
+                                </Button>
                             </Td>
                         </Tr>
                     ))}
