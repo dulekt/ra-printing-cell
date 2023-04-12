@@ -8,17 +8,18 @@ import server_data from '@/data/server_data';
 const { ip, port } = server_data();
 
 function updateIsPrinted(id) {
-    const updateIsPrintedRequest = async id => {
-        const response = await fetch(`http://${ip}:${port}/update_is_printed/${id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-        });
+    console.log(id);
 
-        const data = await response.json();
-        console.log(data);
-    };
+    fetch(`http://${ip}:${port}/update_is_printed/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
 }
 
 function handlePrint(id) {
@@ -108,7 +109,7 @@ export default function OrderTable({ orders, fetchOrders }) {
                                     colorScheme="green"
                                     size="sm"
                                     onClick={() => updateIsPrinted(order.id)}
-                                    variant={order.isPrinted ? 'outline' : 'solid'}
+                                    variant={'outline'}
                                 >
                                     X
                                 </Button>
