@@ -1,0 +1,14 @@
+const data = {
+    host: '10.76.18.204',
+    port: 5000,
+};
+
+export default function server_data() {
+    const ip = data.host;
+    const { port } = data;
+
+    return { ip, port };
+    
+}
+
+// Path: src\components\server_data.jsx

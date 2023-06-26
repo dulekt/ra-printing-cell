@@ -1,164 +1,148 @@
 import {
-  Table,
-  Thead,
-  Tbody,
-  Tfoot,
-  Tr,
-  Th,
-  Td,
-  TableCaption,
-  TableContainer,
-  Button,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  SimpleGrid,
-  Input,
-  Box,
-  Text,
-  Select,
-  Center,
-} from "@chakra-ui/react";
-import { useEffect, useState } from "react";
+    Box,
+    Button,
+    FormControl,
+    Input,
+    Select,
+    SimpleGrid,
+    Table,
+    TableContainer,
+    Tbody,
+    Td,
+    Text,
+    Th,
+    Thead,
+    Tr,
+} from '@chakra-ui/react';
 
-export default function PrinterUI() {
-  const [printers, setPrinters] = useState([]);
-  const [workcenters, setWorkcenters] = useState([]);
+import server_data from '@/data/server_data';
 
-  const fetchWorkcenters = async () => {
-    const response = await fetch("http://localhost:5000/workcenters");
-    const data = await response.json();
-    const dataArr = Object.values(data);
+const { ip, port } = server_data();
 
-    const workcenterArr = dataArr.map((workcenter) => workcenter.workcenter);
-    setWorkcenters(workcenterArr);
-    console.log(workcenterArr);
-  };
+export default function PrinterUI({ printers, workcenters, isLoading, isError, errorMessage }) {
+    const handleAdd = async e => {
+        const name = document.getElementById('printerName').value;
+        const printerIP = document.getElementById('printerIP').value;
+        const printerPort = document.getElementById('printerPort').value;
+        const printerDPI = document.getElementById('printerDPI').value;
+        const workcenter = document.getElementById('workcenter').value;
+        const response = await fetch(`http://${ip}:${port}/printers`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                printerName: name,
+                printerIP,
+                printerPort,
+                printerDPI,
+                workcenter,
+            }),
+        });
 
-  const fetchPrinters = async () => {
-    const response = await fetch("http://localhost:5000/printers");
-    const data = await response.json();
-    setPrinters(Object.values(data));
-  };
+        const data = await response.json();
+        console.log('data', data);
 
-  useEffect(() => {
-    fetchWorkcenters();
-    fetchPrinters();
-  }, []);
+        // set form fields to empty
+        document.getElementById('printerName').value = '';
 
-  const handleAdd = async (e) => {
-    const name = document.getElementById("printerName").value;
-    const printerIP = document.getElementById("printerIP").value;
-    const printerPort = document.getElementById("printerPort").value;
-    const printerDPI = document.getElementById("printerDPI").value;
-    const workcenter = document.getElementById("workcenter").value;
-    const response = await fetch("http://localhost:5000/printers", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        printerName: name,
-        printerIP: printerIP,
-        printerPort: printerPort,
-        printerDPI: printerDPI,
-        workcenter: workcenter,
-      }),
-    });
-    const data = await response.json();
-    console.log(data);
-    //set form fields to empty
-    document.getElementById("printerName").value = "";
-    document.getElementById("printerIP").value = "";
-    document.getElementById("printerPort").value = "";
-    document.getElementById("printerDPI").value = "";
+        document.getElementById('printerIP').value = '';
 
-    fetchPrinters();
-  };
+        document.getElementById('printerPort').value = '';
 
-  const handleDelete = async (id) => {
-    console.log(id);
-    const response = await fetch(`http://localhost:5000/printers/${id}`, {
-      method: "DELETE",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+        document.getElementById('printerDPI').value = '';
+    };
 
-    const data = await response.json();
+    const handleDelete = async id => {
+        console.log(id);
 
-    fetchPrinters();
-  };
+        const response = await fetch(`http://${ip}:${port}/printers/${id}`, {
+            method: 'DELETE',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        });
 
-  return (
-    <div margin="auto">
-      <Box>
-        <Text>Dodaj nową drukarkę</Text>
-        <SimpleGrid columns={3} spacing={3}>
-          <FormControl id="printerName">
-            <Input type="text" placeholder="Printer Name" />
-          </FormControl>
-          <FormControl id="printerIP">
-            <Input type="text" placeholder="IP" />
-          </FormControl>
-          <FormControl id="printerPort">
-            <Input type="text" placeholder="Port" />
-          </FormControl>
-          <FormControl id="printerDPI">
-            <Input type="text" placeholder="DPI" />
-          </FormControl>
-          <FormControl id="workcenter">
-            <Select type="text" placeholder="Workcenter">
-              //add options for every workcenter
-              {workcenters.map((workcenter, index) => (
-                <option key={workcenter + index} value={workcenter}>
-                  {workcenter}
-                </option>
-              ))}
-            </Select>
-          </FormControl>
-          <Button colorScheme="blue" size="sm" onClick={handleAdd}>
-            Dodaj
-          </Button>
-        </SimpleGrid>
-      </Box>
-      <h1>Drukarki</h1>
-      <TableContainer>
-        <Table variant="simple">
-          <Thead>
-            <Tr>
-              <Th>Nazwa</Th>
-              <Th>IP</Th>
-              <Th>Port</Th>
-              <Th>DPI</Th>
-              <Th>Workcenter</Th>
-              <Th>Delete</Th>
-            </Tr>
-          </Thead>
-          <Tbody>
-            {printers.map((printer) => (
-              <Tr key={printer.printerID}>
-                <Td>{printer.printerName}</Td>
-                <Td>{printer.printerIP}</Td>
-                <Td>{printer.printerPort}</Td>
-                <Td>{printer.printerDPI}</Td>
-                <Td>{printer.workcenter}</Td>
-                <Td>
-                  <Button
-                    colorScheme="red"
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(printer.printerID)}
-                  >
-                    X
-                  </Button>
-                </Td>
-              </Tr>
-            ))}
-          </Tbody>
-        </Table>
-      </TableContainer>
-    </div>
-  );
+        const data = await response.json();
+    };
+
+    return (
+        <div>
+            {workcenters.length > 0 ? (
+                <Box>
+                    <Text>Dodaj nową drukarkę</Text>
+                    <SimpleGrid columns={3} spacing={3}>
+                        <FormControl id="printerName">
+                            <Input type="text" placeholder="Printer Name" />
+                        </FormControl>
+                        <FormControl id="printerIP">
+                            <Input type="text" placeholder="IP" />
+                        </FormControl>
+                        <FormControl id="printerPort">
+                            <Input type="text" placeholder="Port" />
+                        </FormControl>
+                        <FormControl id="printerDPI">
+                            <Input type="text" placeholder="DPI" />
+                        </FormControl>
+                        <FormControl id="workcenter">
+                            <Select type="text" placeholder="Workcenter">
+                                {workcenters?.map((workcenter, index) => (
+                                    <option key={index} value={workcenter.workcenter}>
+                                        {workcenter.workcenter}
+                                    </option>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <Button colorScheme="blue" size="sm" onClick={handleAdd}>
+                            Dodaj
+                        </Button>
+                    </SimpleGrid>
+                </Box>
+            ) : (
+                <Text color="red.500" fontWeight="bold" fontSize="l">
+                    Najpierw dodaj przynajmniej jeden Workcenter{' '}
+                </Text>
+            )}
+            <h1>Drukarki</h1>
+            {isLoading && <div>Loading...</div>}
+            {isError && <div>ERROR {JSON.stringify(errorMessage)}</div>}
+            {!isLoading && !isError && printers.length > 0 && (
+                <TableContainer>
+                    <Table variant="simple">
+                        <Thead>
+                            <Tr>
+                                <Th>Nazwa</Th>
+                                <Th>IP</Th>
+                                <Th>Port</Th>
+                                <Th>DPI</Th>
+                                <Th>Workcenter</Th>
+                                <Th>Delete</Th>
+                            </Tr>
+                        </Thead>
+                        <Tbody>
+                            {printers?.map(printer => (
+                                <Tr key={printer.printerID}>
+                                    <Td>{printer.printerName}</Td>
+                                    <Td>{printer.printerIP}</Td>
+                                    <Td>{printer.printerPort}</Td>
+                                    <Td>{printer.printerDPI}</Td>
+                                    <Td>{printer.workcenter}</Td>
+                                    <Td>
+                                        <Button
+                                            colorScheme="red"
+                                            variant="outline"
+                                            size="sm"
+                                            onClick={() => handleDelete(printer.printerID)}
+                                        >
+                                            X
+                                        </Button>
+                                    </Td>
+                                </Tr>
+                            ))}
+                        </Tbody>
+                    </Table>
+                </TableContainer>
+            )}
+        </div>
+    );
 }
