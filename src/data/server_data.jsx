@@ -8,4 +8,7 @@ export default function server_data() {
     const { port } = data;
 
     return { ip, port };
+    
 }
+
+// Path: src\components\server_data.jsx
